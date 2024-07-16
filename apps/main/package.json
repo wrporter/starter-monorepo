@@ -1,0 +1,25 @@
+{
+  "name": "main",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "ci": "run-p lint typecheck test:coverage build",
+    "clean": "rm -rf build coverage",
+    "dev": "NODE_ENV=development tsx watch src/main.ts",
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
+    "lint:fix": "npm run lint -- --fix",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "fastify": "4.28.1"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/tsconfig": "*",
+    "@types/node": "20.14.10",
+    "eslint": "8.57.0",
+    "pino-pretty": "11.2.1",
+    "tsx": "4.16.2",
+    "typescript": "5.5.3"
+  }
+}

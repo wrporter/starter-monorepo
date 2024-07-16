@@ -1,0 +1,29 @@
+{
+  "name": "starter-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "packageManager": "npm@10.7.0",
+  "scripts": {
+    "build": "turbo run build",
+    "changeset": "changeset",
+    "changeset:apply": "changeset version",
+    "ci": "turbo run lint typecheck test:coverage build",
+    "clean": "rm -rf **/node_modules **/.turbo",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "format": "prettier --write .",
+    "release": "changeset publish",
+    "test": "turbo run test --filter=!api-tests",
+    "update-dependencies": "npx npm-check-updates -u --root -ws",
+    "update-package-lock": "rm -rf **/node_modules package-lock.json && npm install"
+  },
+  "devDependencies": {
+    "@changesets/cli": "2.27.7",
+    "prettier": "3.3.2",
+    "turbo": "2.0.7"
+  }
+}

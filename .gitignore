@@ -1,0 +1,17 @@
+# OS
+.DS_Store
+
+# Editor
+.idea
+*.iml
+.vscode
+
+# Build
+.turbo
+dist
+build
+out
+artifact
+node_modules
+coverage
+.env

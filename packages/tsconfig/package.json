@@ -1,0 +1,8 @@
+{
+    "name": "@repo/tsconfig",
+    "version": "1.0.0",
+    "files": [
+        "README.md",
+        "*.json"
+    ]
+}

@@ -1,0 +1,12 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: ['config:base', 'renovatePrefix'],
+  schedule: ['before 3am on the first day of the month'],
+  reviewersSampleSize: 1,
+  rollbackPrs: true,
+  stabilityDays: 3,
+  internalChecksFilter: 'strict',
+  rangeStrategy: 'bump',
+  updateLockFiles: true,
+  labels: ['renovate'],
+}
