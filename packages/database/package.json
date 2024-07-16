@@ -1,0 +1,31 @@
+{
+  "name": "@repo/database",
+  "version": "1.0.0",
+  "module": "dist/index.mjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "ci": "npm run lint && npm run typecheck && npm run build",
+    "dev": "tsup --watch",
+    "clean": "rm -rf .turbo dist node_modules",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix",
+    "typecheck": "tsc -b"
+  },
+  "peerDependencies": {
+    "drizzle-orm": ">= 0.32.0 < 1"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/tsconfig": "*",
+    "@swc/core": "1.6.13",
+    "drizzle-orm": "0.32.0",
+    "tsup": "8.1.1",
+    "typescript": "5.5.3"
+  }
+}

@@ -1,19 +1,20 @@
 {
-  "name": "main",
+  "name": "database",
   "private": true,
   "type": "module",
   "scripts": {
-    "ci": "run-p lint typecheck test:coverage build",
-    "clean": "rm -rf build coverage",
-    "dev": "NODE_ENV=development tsx watch --env-file=.env src/main.ts",
+    "ci": "run-p lint typecheck",
+    "clean": "rm -rf build",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "npm run lint -- --fix",
     "typecheck": "tsc -b"
   },
   "dependencies": {
     "@repo/database": "*",
+    "drizzle-kit": "0.23.0",
     "drizzle-orm": "0.32.0",
-    "fastify": "4.28.1",
     "postgres": "3.4.4"
   },
   "devDependencies": {
@@ -21,8 +22,6 @@
     "@repo/tsconfig": "*",
     "@types/node": "20.14.10",
     "eslint": "8.57.0",
-    "pino-pretty": "11.2.1",
-    "tsx": "4.16.2",
     "typescript": "5.5.3"
   }
 }

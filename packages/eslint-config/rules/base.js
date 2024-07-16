@@ -78,6 +78,7 @@ module.exports = {
     '@typescript-eslint/no-shadow': 'off',
     '@typescript-eslint/indent': 'off',
     '@typescript-eslint/quotes': 'off',
+    'object-curly-newline': 'off',
 
     // JSDoc
     // Do not require by default, only in libraries

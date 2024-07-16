@@ -1,4 +1,6 @@
-import fastify from 'fastify';
+import Fastify from 'fastify';
+
+import { contactRouter } from './modules/contacts/contact.router';
 
 const envToLogger = {
     development: {
@@ -14,14 +16,15 @@ const envToLogger = {
     test: false,
 };
 
-const server = fastify({ logger: envToLogger[process.env.NODE_ENV as keyof typeof envToLogger] });
+const fastify = Fastify({ logger: envToLogger[process.env.NODE_ENV as keyof typeof envToLogger] });
 
-server.get('/ping', async () => 'pong\n');
+fastify.get('/health', () => 'ok');
+fastify.register(contactRouter);
 
-server.listen({ port: 8080 }, (err, address) => {
+fastify.listen({ port: 3000 }, (err, address) => {
     if (err) {
-        console.error(err);
+        fastify.log.error(err);
         process.exit(1);
     }
-    console.log(`Server listening at ${address}`);
+    fastify.log.info(`Server listening at ${address}`);
 });
