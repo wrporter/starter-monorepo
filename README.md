@@ -4,6 +4,8 @@
 - [ ]: Build only apps and packages that have changed.
 - [ ]: Be able to easily extract an app/package into its own repository.
 - [ ]: A single entrypoint to build all packages and apps, publish changed packages, and deploy changed apps.
+- [ ]: Frontend
+   - [ ]: MUI breaks the dev server
 
 # starter-monorepo
 
