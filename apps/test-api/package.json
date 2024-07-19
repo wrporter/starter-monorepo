@@ -1,0 +1,26 @@
+{
+  "name": "test-api",
+  "private": true,
+  "scripts": {
+    "ci": "run-p typecheck lint",
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
+    "lint:fix": "npm run lint -- --fix",
+    "test": "vitest run",
+    "test:local": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "@repo/tsconfig": "*",
+    "vite": "5.3.4",
+    "vite-tsconfig-paths": "4.3.2",
+    "vitest": "2.0.3"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@types/node": "20.14.11",
+    "eslint": "8.57.0",
+    "npm-run-all": "4.1.5",
+    "typescript": "5.5.3"
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "extends": "@repo/tsconfig/api-tests.json",
+  "include": ["**/*", ".*"]
+}

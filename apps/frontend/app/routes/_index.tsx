@@ -1,25 +1,20 @@
-import * as React from "react";
-import type { MetaFunction } from "@remix-run/node";
-import { Link as RemixLink } from "@remix-run/react";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
+import { Alert, Container, Typography } from "@mui/material";
+import { Check as CheckIcon } from "@mui/icons-material";
 
-// https://remix.run/docs/en/main/route/meta
-export const meta: MetaFunction = () => [
-  { title: "Remix Starter" },
-  { name: "description", content: "Welcome to remix!" },
-];
-
-// https://remix.run/docs/en/main/file-conventions/routes#basic-routes
-export default function Index() {
+export default function Mui() {
   return (
-    <React.Fragment>
-      <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-        Material UI Remix in TypeScript example
+    <Container fixed className="mt-4">
+      <Typography variant="h1" fontSize={40}>
+        Welcome to Remix with Material UI
       </Typography>
-      <Link to="/about" color="secondary" component={RemixLink}>
-        Go to the about page
-      </Link>
-    </React.Fragment>
+
+      <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+        Material UI is working!
+      </Alert>
+
+      <div className="bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">
+        If this text is rainbow-colored, then Tailwind is working!
+      </div>
+    </Container>
   );
 }
