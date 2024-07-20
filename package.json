@@ -6,6 +6,10 @@
     "packages/*"
   ],
   "packageManager": "npm@10.7.0",
+  "engines": {
+    "npm": ">=10.7.0",
+    "node": ">=20.15.1"
+  },
   "scripts": {
     "build": "turbo run build",
     "changeset": "changeset",
