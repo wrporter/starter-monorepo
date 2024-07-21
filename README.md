@@ -23,7 +23,7 @@ This is a monorepo starter for multiple services and packages. Public packages a
    ```shell
    npm run dev
    ```
-3. Visit http://localhost:3000
+3. Visit http://localhost:3001
 
 ## Unit Tests
 
