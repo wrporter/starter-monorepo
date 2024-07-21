@@ -3,6 +3,7 @@
   "include": ["src"],
   "exclude": ["**/build", "coverage"],
   "compilerOptions": {
-    "outDir": "build"
+    "outDir": "build",
+    "module": "ESNext"
   }
 }

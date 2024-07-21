@@ -1,6 +1,7 @@
 {
   "name": "test-api",
   "private": true,
+  "type": "module",
   "scripts": {
     "ci": "run-p typecheck lint",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",

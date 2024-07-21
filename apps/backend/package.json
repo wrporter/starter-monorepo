@@ -1,6 +1,7 @@
 {
   "name": "backend",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "ci": "run-p lint typecheck test:coverage build",
@@ -16,6 +17,7 @@
     "drizzle-orm": "0.32.0",
     "effect": "3.5.4",
     "fastify": "4.28.1",
+    "fastify-graceful-shutdown": "4.0.1",
     "postgres": "3.4.4"
   },
   "devDependencies": {

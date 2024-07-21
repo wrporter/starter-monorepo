@@ -1,8 +1,8 @@
 import { Effect } from 'effect';
 import type { FastifyInstance } from 'fastify';
 
-import type { Contact } from './contact.repo';
-import { create, getByEmail, list } from './contact.service';
+import type { Contact } from './contact.repo.js';
+import { create, getByEmail, list } from './contact.service.js';
 
 interface ContactParams {
     email: string;

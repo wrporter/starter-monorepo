@@ -4,12 +4,14 @@
 - [ ]: Build only apps and packages that have changed.
 - [ ]: Be able to easily extract an app/package into its own repository.
 - [ ]: A single entrypoint to build all packages and apps, publish changed packages, and deploy changed apps.
+- [ ]: Consider splitting dockerfiles for different app types. This has already been done for test-e2e and can also be done for test-api because they depend on more files and have a different start command. One way to achieve this is with multiple Dockerfiles in the same directory by type (e.g. app.Dockerfile, test-api.Dockerfile, test-e2e.Dockerfile). Also consider using turborepo with npm scripts in each app that know how to build their own docker image (e.g. `npx turbo run docker:build --scope=test-e2e` would only run the npm script in the test-e2e app).
+- [ ]: Determine a consistent way to build and execute each app. When transpiling TypeScript apps, by default they are compiled to CommonJS. We can compile to ESM by setting `"module": "ESNext"` in `tsconfig.json`. However, when doing this, we must also import with file extensions (e.g. `import './module.js'` versus `import './module'`. Is it just better to include explicit file extensions in all imports?
 
 # starter-monorepo
 
 **NOTE: This starter project is incomplete and not ready for use!**
 
-This is a monorepo starter for a service. The difference between this starter and the non-monorepo ones is that it allows for publishing packages associated with a project, such as types or clients/SDKs. This starter is not intended to contain multiple services and should be scoped to a single service. This allows for simplified ownership transfer of specific domain areas.
+This is a monorepo starter for multiple services and packages. Public packages are intended to be published, such as types or clients/SDKs.
 
 ## Getting Started
 
@@ -46,17 +48,17 @@ API tests are a lower-cost replacement for integration tests. They are essential
    ```shell
    npm run test:local -w=api-tests
    ```
+   
+## Docker
+
+You can build and validate individual containers via `.ci/build.sh backend` and `.ci/run.sh app backend`.
+
+Run tests via `.ci/build.sh test-api` and `.ci/run.sh test test-api`.
+
+Spin up the full environment with `docker-compose up`. Include the `--build` flag to rebuild the images. This will first start the database, run migrations, start the backend then the frontend, and finally run API and E2E tests.
 
 ## CI Pipeline
 
-**NOTE: This section is a work in progress and we hope to abstract shell scripts and dockerfiles out so they do not have to be copy-pasted.**
+TODO
 
-1. Build the base image and all workspaces: `.ci/entrypoint-build.sh`
-2. Publish Docker images and npm packages: `.ci/entrypoint-publish.sh`
-3. Test out the Docker images locally
-   - Run the main app: `.ci/run-local-main.sh`
-   - Validate via API tests: `.ci/run-local-api-tests.sh`
-4. Publish TRS results
-   - For the main app: `.ci/report-trs.sh` (includes coverage)
-   - For API tests: `.ci/report-trs-api-tests.sh`
-5. After deployment, push a production image for tests: `.ci/entrypoint-post-deploy.sh`
+[act](https://nektosact.com/) is an incredibly useful tool for testing out GitHib Actions workflows locally.

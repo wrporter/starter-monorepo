@@ -3,12 +3,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "ci": "run-p lint typecheck",
+    "build": "tsc",
+    "ci": "run-p lint typecheck build",
     "clean": "rm -rf build",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "npm run lint -- --fix",
+    "start": "NODE_ENV=production node ./build/main.js",
     "typecheck": "tsc -b"
   },
   "dependencies": {

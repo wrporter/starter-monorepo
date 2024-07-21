@@ -1,0 +1,80 @@
+services:
+
+  database:
+    container_name: database
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./apps/database/data:/var/lib/postgresql/data
+      - ./apps/database/src/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+
+  database-migrations:
+    container_name: database-migrations
+    build:
+      context: .
+      dockerfile: .ci/Dockerfile
+      args:
+        APP: database
+    volumes:
+      - ./apps/database/migrations:/app/migrations
+    depends_on:
+      - database
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@database:5432/monorepo
+
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: .ci/Dockerfile
+      args:
+        APP: backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      database-migrations:
+        condition: service_completed_successfully
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@database:5432/monorepo
+
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: .ci/Dockerfile
+      args:
+        APP: frontend
+    ports:
+      - "3001:3000"
+    depends_on:
+      - backend
+
+  test-api:
+    container_name: test-api
+    build:
+      context: .
+      dockerfile: .ci/Dockerfile
+      args:
+        APP: test-api
+    depends_on:
+      - backend
+    command: npm test
+    environment:
+      - ADDRESS=http://backend:3000
+
+  test-e2e:
+    container_name: test-e2e
+    build:
+      context: .
+      dockerfile: apps/test-e2e/Dockerfile
+      args:
+        APP: test-e2e
+    depends_on:
+      - frontend
+    environment:
+      - ADDRESS=http://frontend:3000

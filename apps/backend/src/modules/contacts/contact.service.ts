@@ -1,7 +1,7 @@
 import { Effect, pipe } from 'effect';
 
-import * as db from './contact.repo';
-import type { Contact } from './contact.repo';
+import * as db from './contact.repo.js';
+import type { Contact } from './contact.repo.js';
 
 export class NotFoundError extends Error {
     readonly _tag = 'NotFoundError';

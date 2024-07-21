@@ -1,5 +1,9 @@
 {
   "extends": "@repo/tsconfig/node.json",
-  "include": ["**/*", ".*"],
-  "exclude": ["**/build", "coverage"]
+  "include": ["src"],
+  "exclude": ["**/build", "coverage"],
+  "compilerOptions": {
+    "outDir": "build",
+    "module": "ESNext"
+  }
 }

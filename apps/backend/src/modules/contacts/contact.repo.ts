@@ -1,7 +1,7 @@
 import { contacts } from '@repo/database';
 import { eq } from 'drizzle-orm';
 
-import { db } from '../../db';
+import { db } from '../../db.js';
 
 type ContactRepo = typeof contacts.$inferInsert;
 export interface Contact extends ContactRepo {}

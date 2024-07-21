@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
+import fastifyGracefulShutdown from 'fastify-graceful-shutdown';
 
-import { contactRouter } from './modules/contacts/contact.router';
+import { contactRouter } from './modules/contacts/contact.router.js';
 
 const envToLogger = {
     development: {
@@ -16,7 +17,7 @@ const envToLogger = {
     test: false,
 };
 
-const fastify = Fastify({ logger: envToLogger[process.env.NODE_ENV as keyof typeof envToLogger] });
+const fastify = Fastify({ logger: envToLogger[(process.env.NODE_ENV as keyof typeof envToLogger) ?? 'development'] });
 
 fastify.get('/health', () => 'ok');
 fastify.get('/version', () => ({
@@ -28,7 +29,14 @@ fastify.get('/version', () => ({
 }));
 fastify.register(contactRouter);
 
-fastify.listen({ port: 3000 }, (err, address) => {
+fastify.register(fastifyGracefulShutdown);
+fastify.after(() => {
+    fastify.gracefulShutdown((signal) => {
+        fastify.log.info('Received signal to shutdown: %s', signal);
+    });
+});
+
+fastify.listen({ host: '0.0.0.0', port: 3000 }, (err, address) => {
     if (err) {
         fastify.log.error(err);
         process.exit(1);
