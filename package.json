@@ -17,6 +17,7 @@
     "ci": "turbo run lint typecheck test:coverage build",
     "clean": "rm -rf **/node_modules **/.turbo",
     "dev": "turbo run dev",
+    "docker:build": "turbo run docker:build",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --write .",

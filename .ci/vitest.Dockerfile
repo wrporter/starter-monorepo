@@ -1,47 +1,40 @@
 ###############################################################################
+# Prepare an image for a test runner, such as API tests.
+###############################################################################
+
+###############################################################################
+# Image containing all built artifacts
+###############################################################################
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE} AS artifact
+
+###############################################################################
 # Base image
 ###############################################################################
-FROM node:20
-FROM mcr.microsoft.com/playwright:v1.45.1-noble AS base
+FROM node:20-alpine AS base
 
 WORKDIR /app
+RUN apk update && apk upgrade --no-cache
+RUN npm config set update-notifier false
 
-RUN apt-get update && apt-get install -y ca-certificates
-
-###############################################################################
-# Copy over dependency files to prepare for install
-###############################################################################
-FROM base AS dependencies
-
-COPY . .
-
-# Find and remove non-package.json files
-RUN sudo find . \! -name "package*.json" -mindepth 3 -maxdepth 3 -print | xargs rm -rf
-
-###############################################################################
-# Install dependencies and build
-###############################################################################
-FROM base AS build
-
-COPY --from=dependencies /app .
-
-RUN --mount=type=cache,target=/root/.npm npm ci --loglevel=warn
-
-COPY . .
+ENV TURBO_TELEMETRY_DISABLED=1
 
 ###############################################################################
 # Prune everything except what's necessary for the app
 ###############################################################################
 FROM base AS prune
 
-COPY --from=build /app .
+# See https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine
+# to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+
+COPY --from=artifact /app .
 
 ARG APP
-RUN npx turbo prune --scope=test-e2e --docker
+RUN npx turbo prune --scope=${APP} --docker
 
 WORKDIR /app/out/json
 
-RUN npm ci --omit=dev --loglevel=warn
 RUN npm prune --omit=dev
 
 ###############################################################################
@@ -50,11 +43,13 @@ RUN npm prune --omit=dev
 FROM base AS production
 
 COPY --from=prune /app/out/json/node_modules ./node_modules
+# TODO: Optimize the package copy to only copy package.json and dist.
 COPY --from=prune /app/out/full/packages* ./packages
-COPY --from=prune /app/apps/test-e2e/ apps/test-e2e/
 
-RUN npx -y playwright install --with-deps
+ARG APP
 
-WORKDIR /app/apps/test-e2e
+WORKDIR /app/apps/${APP}
 
-CMD npm test
+COPY --from=prune /app/apps/${APP}/ ./
+
+CMD ["npx", "vitest", "run"]

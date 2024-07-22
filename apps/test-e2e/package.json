@@ -2,6 +2,7 @@
   "name": "test-e2e",
   "private": true,
   "scripts": {
+    "docker:build": "cd ../.. && APP=test-e2e APP_TYPE=playwright .ci/build-app.sh",
     "test": "playwright test",
     "test:ui": "playwright test --ui"
   },

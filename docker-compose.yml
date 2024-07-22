@@ -1,5 +1,11 @@
 services:
 
+  base:
+    container_name: base
+    build:
+      context: .
+      dockerfile: .ci/base.Dockerfile
+
   database:
     container_name: database
     image: postgres:16
@@ -23,6 +29,7 @@ services:
     volumes:
       - ./apps/database/migrations:/app/migrations
     depends_on:
+      - base
       - database
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@database:5432/monorepo
@@ -37,6 +44,8 @@ services:
     ports:
       - "3000:3000"
     depends_on:
+      base:
+        condition: service_completed_successfully
       database-migrations:
         condition: service_completed_successfully
     environment:
@@ -52,6 +61,7 @@ services:
     ports:
       - "3001:3000"
     depends_on:
+      - base
       - backend
 
   test-api:
@@ -62,6 +72,7 @@ services:
       args:
         APP: test-api
     depends_on:
+      - base
       - backend
     command: npm test
     environment:
@@ -75,6 +86,7 @@ services:
       args:
         APP: test-e2e
     depends_on:
+      - base
       - frontend
     environment:
       - ADDRESS=http://frontend:3000

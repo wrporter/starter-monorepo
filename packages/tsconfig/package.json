@@ -1,8 +1,9 @@
 {
-    "name": "@repo/tsconfig",
-    "version": "1.0.0",
-    "files": [
-        "README.md",
-        "*.json"
-    ]
+  "name": "@repo/tsconfig",
+  "version": "1.0.0",
+  "private": true,
+  "files": [
+    "README.md",
+    "*.json"
+  ]
 }

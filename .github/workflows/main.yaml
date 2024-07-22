@@ -43,3 +43,11 @@ jobs:
 
       - name: 🛠️ Build
         run: npm run ci
+
+      # TODO: Move to a separate workflow. How do we share the common steps between workflows?
+      - name: 🐳 Build Docker images
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          .ci/build-base.sh
+          .ci/publish-packages.sh
+          npx turbo run docker:build --filter=[HEAD^1]

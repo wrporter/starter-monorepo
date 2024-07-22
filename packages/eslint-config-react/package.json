@@ -1,6 +1,7 @@
 {
   "name": "@repo/eslint-config-react",
   "version": "1.0.0",
+  "private": true,
   "main": "index.js",
   "files": [
     "README.md",
