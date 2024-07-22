@@ -13,6 +13,6 @@ buildDocker \
   --tag "${PACKAGE_TAG}" \
   - < .ci/package.Dockerfile
 
-docker run -it --init --rm \
+docker run --rm \
 	--name="${NAMESPACE}-package" \
 	${PACKAGE_TAG}
