@@ -3,12 +3,13 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
+  "dockerfileType": "node",
   "scripts": {
     "build": "npm run build:remix && npm run build:server",
     "build:remix": "remix vite:build",
     "build:server": "tsc --project ./tsconfig.server.json",
     "dev": "tsx watch --clear-screen=false --enable-source-maps --ignore \".cache/**\" --ignore \"app/**\" --ignore \"vite.config.ts.timestamp-*\" --ignore \"build/**\" --ignore \"node_modules/**\" server/main.ts",
-    "docker:build": "cd ../.. && APP=frontend APP_TYPE=node .ci/build-app.sh",
+    "docker:build": "cd ../.. && APP=frontend APP_TYPE=node .github/docker/build-app.sh",
     "start": "NODE_ENV=production node --enable-source-maps ./build/main.js",
     "typecheck": "tsc -b"
   },

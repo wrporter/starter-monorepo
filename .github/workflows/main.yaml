@@ -8,8 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build and Test
-    timeout-minutes: 15
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -44,10 +43,111 @@ jobs:
       - name: 🛠️ Build
         run: npm run ci
 
-      # TODO: Move to a separate workflow. How do we share the common steps between workflows?
-      - name: 🐳 Build Docker images
+      - name: Publish packages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx changeset publish
+
+  detect-changes:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      changed_apps: ${{ steps.changed-apps.outputs.apps }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed app directories
+        id: changed-app-directories
+        uses: tj-actions/changed-files@v44
+        with:
+          files: apps/**/*
+          dir_names: true
+          dir_names_max_depth: 2
+          dir_names_exclude_current_dir: true
+          matrix: true
+          escape_json: false
+
+      - name: Convert app directory paths to app names
+        id: changed-apps
         run: |
-          .ci/build-base.sh
-          .ci/publish-packages.sh
-          npx turbo run docker:build --filter=[HEAD^1]
+          changed_apps=$(echo '${{ steps.changed-app-directories.outputs.all_changed_files }}' | jq -c '[.[] | sub("apps/"; "")]')
+          echo "::set-output name=apps::${changed_apps}"
+
+  docker-build:
+    if: needs.detect-changes.outputs.changed_apps != '[]'
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    env:
+      DOCKER_REGISTRY: docker.io # TODO: Update the registry
+    strategy:
+      matrix:
+        app: ${{ fromJson(needs.detect-changes.outputs.changed_apps) }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Determine Dockerfile Type from package.json
+        id: determine-dockerfile
+        run: |
+          # Read the dockerfileType from the app's package.json
+          dockerfile_type=$(jq -r '.dockerfileType' apps/${{ matrix.app }}/package.json)
+          echo "Dockerfile type for ${{ matrix.app }}: ${dockerfile_type}"
+          
+          # Fail the step if dockerfileType is not found
+          if [ -z "${dockerfile_type}" ] || [ "${dockerfile_type}" == "null" ]; then
+            echo "Error: dockerfileType not found in package.json for ${{ matrix.app }}"
+            exit 1
+          fi
+          
+          echo "::set-output name=dockerfile_type::${dockerfile_type}"
+
+      - name: Set Build Arguments
+        id: set-build-args
+        run: |
+          echo "APP_ID=$(basename `git rev-parse --show-toplevel`)-${{ matrix.app }}" >> $GITHUB_ENV
+          echo "BUILD_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          echo "BUILD_BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          echo "BUILD_DATE=$(date -u '+%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_ENV
+          echo "NAMESPACE=$(basename `git rev-parse --show-toplevel`)" >> $GITHUB_ENV
+
+      - name: Build base image
+        if: ${{ matrix.app != 'test-e2e' }} # Skip base image build for test-e2e
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: .github/docker/base.Dockerfile
+          tags: base-image:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Publish packages
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: .github/docker/package.Dockerfile
+          tags: base-image:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: "Build app image: ${{ matrix.app }}"
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: .github/docker/${{ steps.determine-dockerfile.outputs.dockerfile_type }}.Dockerfile
+          build-args: |
+            BASE_IMAGE=base-image:latest
+            APP=${{ matrix.app }}
+            APP_ID=${{ env.APP_ID }}
+            BUILD_SHA=${{ env.GITHUB_SHA }}
+            BUILD_BRANCH=${{ env.BUILD_BRANCH }}
+            BUILD_DATE=${{ env.BUILD_DATE }}
+          tags: |
+            ${{ env.DOCKER_REGISTRY }}/${{ env.NAMESPACE }}/${{ matrix.app }}:latest
+            ${{ env.DOCKER_REGISTRY }}/${{ env.NAMESPACE }}/${{ matrix.app }}:${{ env.BUILD_SHA }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

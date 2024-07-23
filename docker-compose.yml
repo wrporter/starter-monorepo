@@ -1,10 +1,11 @@
 services:
 
   base:
+    image: base-image
     container_name: base
     build:
       context: .
-      dockerfile: .ci/base.Dockerfile
+      dockerfile: .github/docker/base.Dockerfile
 
   database:
     container_name: database
@@ -23,9 +24,10 @@ services:
     container_name: database-migrations
     build:
       context: .
-      dockerfile: .ci/Dockerfile
+      dockerfile: .github/docker/node.Dockerfile
       args:
         APP: database
+        BASE_IMAGE: base-image
     volumes:
       - ./apps/database/migrations:/app/migrations
     depends_on:
@@ -38,9 +40,10 @@ services:
     container_name: backend
     build:
       context: .
-      dockerfile: .ci/Dockerfile
+      dockerfile: .github/docker/node.Dockerfile
       args:
         APP: backend
+        BASE_IMAGE: base-image
     ports:
       - "3000:3000"
     depends_on:
@@ -55,9 +58,10 @@ services:
     container_name: frontend
     build:
       context: .
-      dockerfile: .ci/Dockerfile
+      dockerfile: .github/docker/node.Dockerfile
       args:
         APP: frontend
+        BASE_IMAGE: base-image
     ports:
       - "3001:3000"
     depends_on:
@@ -68,9 +72,10 @@ services:
     container_name: test-api
     build:
       context: .
-      dockerfile: .ci/Dockerfile
+      dockerfile: .github/docker/vitest.Dockerfile
       args:
         APP: test-api
+        BASE_IMAGE: base-image
     depends_on:
       - base
       - backend
@@ -82,7 +87,7 @@ services:
     container_name: test-e2e
     build:
       context: .
-      dockerfile: apps/test-e2e/Dockerfile
+      dockerfile: .github/docker/playwright.Dockerfile
       args:
         APP: test-e2e
     depends_on:

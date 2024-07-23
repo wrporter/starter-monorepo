@@ -3,9 +3,10 @@
 # Common config for Docker building scripts.
 
 # TODO: Configure these for your app
-NAMESPACE="starter-monorepo"
 SLACK_CHANNEL="#slack_channel"
-DOCKER_HOST="docker.io"
+DOCKER_HOST=${DOCKER_HOST:="docker.io"}
+
+NAMESPACE=$(basename `git rev-parse --show-toplevel`)
 
 GIT_REPO_URL="${GIT_URL:-$(git remote get-url origin)}"
 GIT_COMMIT=${GIT_COMMIT:-$(git rev-parse HEAD)}

@@ -7,6 +7,9 @@ FROM mcr.microsoft.com/playwright:v1.45.1-noble AS base
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y ca-certificates
+RUN npm config set update-notifier false
+
+ENV TURBO_TELEMETRY_DISABLED=1
 
 ###############################################################################
 # Copy over dependency files to prepare for install

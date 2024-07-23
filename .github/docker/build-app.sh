@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
 
+# TODO: Consider removing in favor of only using docker-compose and GitHub Actions.
+#       Make sure to also remove the docker:build script in each package.json file.
 # Build a specific app in the workspace. The app must be defined in the apps
 # directory.
 
 set -e
-source .ci/config.sh
+source .github/docker/config.sh
 
 if [[ -z "${APP}" || -z "${APP_TYPE}" ]]; then
   echo "Variables APP and APP_TYPE must be defined and corresponds to the name
-  in package.json (e.g. database) and the Dockerfile in the .ci directory (e.g.
+  in package.json (e.g. database) and the Dockerfile in the .github/docker directory (e.g.
   {app-type}.Dockerfile)."
-  echo "Usage: APP=database APP_TYPE=node .ci/build-app.sh"
+  echo "Usage: APP=database APP_TYPE=node .github/docker/build-app.sh"
   exit 1
 fi
 
@@ -24,7 +26,7 @@ if [ ${APP_TYPE} == "playwright" ]; then
     --build-arg APP=${APP} \
     --tag "${APP_TAG}" \
     --tag "${APP_HOST_PATH}:latest" \
-    --file .ci/${APP_TYPE}.Dockerfile \
+    --file .github/docker/${APP_TYPE}.Dockerfile \
     .
 else
   buildDocker \
@@ -36,5 +38,5 @@ else
     --build-arg BUILD_DATE=${BUILD_DATE} \
     --tag "${APP_TAG}" \
     --tag "${APP_HOST_PATH}:latest" \
-    - < .ci/${APP_TYPE}.Dockerfile
+    - < .github/docker/${APP_TYPE}.Dockerfile
 fi

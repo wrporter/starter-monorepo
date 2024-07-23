@@ -66,6 +66,7 @@ WORKDIR /app/apps/${APP}
 
 COPY --from=prune /app/apps/${APP}/node_modules ./node_modules
 COPY --from=prune /app/apps/${APP}/build ./build
+COPY --from=prune /app/apps/${APP}/migrations* ./migrations
 # Required to run ESM files from node due to type:module.
 COPY --from=prune /app/apps/${APP}/package.json ./package.json
 

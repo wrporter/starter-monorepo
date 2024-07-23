@@ -53,10 +53,9 @@ API tests are a lower-cost replacement for integration tests. They are essential
    
 ## Docker
 
-There is a [base.Dockerfile](.ci/base.Dockerfile) to build common parts for all other app images (that use Alpine Linux), except for Playwright apps because Playwright is not supported on Alpine. Build this base image first in order to build other images via `.ci/build-base.sh`.
+There is a [base.Dockerfile](.github/docker/base.Dockerfile) to build common parts for all other app images (that use Alpine Linux), except for Playwright apps because Playwright is not supported on Alpine. Build this base image first in order to build other images via `.github/docker/build-base.sh`.
 
-You can build individual apps via `APP=backend APP_TYPE=node .ci/build-app.sh backend`.
-
+You can build individual apps via `APP=backend APP_TYPE=node .github/docker/build-app.sh backend`.
 
 Spin up the full environment with `docker-compose up`. Include the `--build` flag to rebuild the images. This will first start the database, run migrations, start the backend then the frontend, and finally run API and E2E tests.
 
@@ -64,9 +63,11 @@ Build and run a single app with `docker-compose up --build {app}`. For example `
 
 Run tests via `docker-compose up --build test-api`. Use the `--build` flag when code has changed.
 
+For the GitHub Actions workflow to run properly, every `package.json` must have a `dockerfileType` field corresponding to the Dockerfile type to use, e.g. `node` to reference the Dockerfile at `.github/docker/node.Dockerfile`.
+
 ## Packages
 
-Publish packages to the npm registry with `.ci/build-base.sh && .ci/publish-packages.sh`
+Publish packages to the npm registry with `.github/docker/build-base.sh && .github/docker/publish-packages.sh`. The GitHub Actions workflow will publish packages on pushes to the main branch.
 
 ## CI Pipeline
 

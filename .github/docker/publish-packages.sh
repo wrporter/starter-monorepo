@@ -4,14 +4,14 @@
 # marked as private in package.json will not be published.
 
 set -e
-source .ci/config.sh
+source .github/docker/config.sh
 
 PACKAGE_TAG="${DOCKER_HOST}/${NAMESPACE}/package:latest"
 
 buildDocker \
   --build-arg BASE_IMAGE="${BASE_TAG}" \
   --tag "${PACKAGE_TAG}" \
-  - < .ci/package.Dockerfile
+  - < .github/docker/package.Dockerfile
 
 docker run --rm \
 	--name="${NAMESPACE}-package" \
