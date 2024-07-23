@@ -125,22 +125,13 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Publish packages
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: .github/docker/package.Dockerfile
-          tags: base-image:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
       - name: "Build app image: ${{ matrix.app }}"
         uses: docker/build-push-action@v6
         with:
           context: .
           file: .github/docker/${{ steps.determine-dockerfile.outputs.dockerfile_type }}.Dockerfile
           build-args: |
-            BASE_IMAGE=base-image:latest
+            BASE_IMAGE=base-image
             APP=${{ matrix.app }}
             APP_ID=${{ env.APP_ID }}
             BUILD_SHA=${{ env.GITHUB_SHA }}
