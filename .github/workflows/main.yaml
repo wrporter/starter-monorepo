@@ -90,13 +90,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          driver-opts: network=host
+          driver: docker
 
       - name: Determine Dockerfile Type from package.json
         id: determine-dockerfile
@@ -127,9 +124,9 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
+          load: true
           file: .github/docker/base.Dockerfile
-          tags: localhost:5000/${{ env.NAMESPACE }}/base-image
+          tags: ${{ env.NAMESPACE }}/base-image
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -139,7 +136,7 @@ jobs:
           context: .
           file: .github/docker/${{ steps.determine-dockerfile.outputs.dockerfile_type }}.Dockerfile
           build-args: |
-            BASE_IMAGE=localhost:5000/${{ env.NAMESPACE }}/base-image
+            BASE_IMAGE=${{ env.NAMESPACE }}/base-image
             APP=${{ matrix.app }}
             APP_ID=${{ env.APP_ID }}
             BUILD_SHA=${{ env.GITHUB_SHA }}
