@@ -142,11 +142,6 @@ jobs:
           name: base-image
           path: /tmp
 
-      - name: Load base image
-        run: |
-          docker load --input /tmp/base-image.tar
-          docker image ls
-
       - name: Set build arguments
         id: set-build-args
         run: |
@@ -155,6 +150,12 @@ jobs:
           echo "BUILD_BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
           echo "BUILD_DATE=$(date -u '+%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_ENV
           echo "NAMESPACE=$(basename `git rev-parse --show-toplevel`)" >> $GITHUB_ENV
+
+      - name: Load base image
+        run: |
+          docker load --input /tmp/base-image.tar
+          docker push localhost:5000/${{ env.NAMESPACE }}/base-image
+          docker image ls
 
       - name: Determine dockerfile type from package.json
         id: determine-dockerfile
@@ -176,8 +177,9 @@ jobs:
         with:
           context: .
           file: .github/docker/${{ steps.determine-dockerfile.outputs.dockerfile_type }}.Dockerfile
+          build-contexts: |
+            base-image=docker-image://localhost:5000/${{ env.NAMESPACE }}/base-image
           build-args: |
-            BASE_IMAGE=localhost:5000/${{ env.NAMESPACE }}/base-image
             APP=${{ matrix.app }}
             APP_ID=${{ env.APP_ID }}
             BUILD_SHA=${{ env.GITHUB_SHA }}
