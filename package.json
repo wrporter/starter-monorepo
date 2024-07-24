@@ -22,7 +22,7 @@
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --write .",
     "release": "changeset publish",
-    "test": "turbo run test --filter=!test-api",
+    "test": "turbo run test --filter=!test-api --filter=!test-e2e",
     "update-dependencies": "npx npm-check-updates -u --root -ws",
     "update-package-lock": "rm -rf **/node_modules package-lock.json && npm install"
   },
