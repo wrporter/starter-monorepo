@@ -143,7 +143,9 @@ jobs:
           path: /tmp
 
       - name: Load base image
-        run: docker load --input /tmp/base-image.tar
+        run: |
+          docker load --input /tmp/base-image.tar
+          docker image ls
 
       - name: Set build arguments
         id: set-build-args
