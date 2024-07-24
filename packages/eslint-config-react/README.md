@@ -26,7 +26,7 @@ npm install --save-dev @repo/eslint-config-react eslint
    - To get the full capabilities of linting with TypeScript, the parser must use the transpiler. If you would like to use a different `tsconfig` for linting, you can specify a new one via `tsconfig.eslint.json` then add the following to your `.eslintrc.cjs` file.
      ```javascript
      parserOptions: {
-         project: './tsconfig.eslint.json'
+       project: './tsconfig.eslint.json';
      }
      ```
 3. In your `package.json` add the following scripts.

@@ -1,5 +1,4 @@
 services:
-
   base:
     image: base-image
     container_name: base
@@ -15,7 +14,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - ./apps/database/data:/var/lib/postgresql/data
       - ./apps/database/src/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
@@ -45,7 +44,7 @@ services:
         APP: backend
         BASE_IMAGE: base-image
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       base:
         condition: service_completed_successfully
@@ -63,7 +62,7 @@ services:
         APP: frontend
         BASE_IMAGE: base-image
     ports:
-      - "3001:3000"
+      - '3001:3000'
     depends_on:
       - base
       - backend

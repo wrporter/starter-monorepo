@@ -10,6 +10,7 @@
     "npm": ">=10.7.0",
     "node": ">=20.15.1"
   },
+  "prettier": "@repo/prettier-config",
   "scripts": {
     "build": "turbo run build",
     "changeset": "changeset",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "2.27.7",
+    "@repo/prettier-config": "*",
     "prettier": "3.3.2",
     "turbo": "2.0.7"
   }

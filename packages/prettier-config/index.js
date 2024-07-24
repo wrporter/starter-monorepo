@@ -8,6 +8,8 @@ export default {
         {
             files: [
                 '*.json*',
+                '*.yml',
+                '*.yaml',
                 '*.md', // Until Prettier resolves spaces with Markdown. See https://github.com/prettier/prettier/issues/5019
             ],
             options: {

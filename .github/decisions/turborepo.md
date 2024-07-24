@@ -8,7 +8,7 @@ Status: proposed
 
 ## Context
 
-To effectively manage a monorepo, a tool is needed to provide greater productivity. For example, running scripts in various apps/packages, caching executions for unchanged apps/packages, and pruning unnecessary files for a specific app. 
+To effectively manage a monorepo, a tool is needed to provide greater productivity. For example, running scripts in various apps/packages, caching executions for unchanged apps/packages, and pruning unnecessary files for a specific app.
 
 ## Decision
 

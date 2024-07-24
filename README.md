@@ -6,7 +6,7 @@
 - [x]: Be able to easily extract an app/package into its own repository.
 - [x]: Scripts to build all packages and apps and publish changed packages.
 - [x]: Consider splitting dockerfiles for different app types. This has already been done for test-e2e and can also be done for test-api because they depend on more files and have a different start command. One way to achieve this is with multiple Dockerfiles in the same directory by type (e.g. app.Dockerfile, test-api.Dockerfile, test-e2e.Dockerfile). Also consider using turborepo with npm scripts in each app that know how to build their own docker image (e.g. `npx turbo run docker:build --scope=test-e2e` would only run the npm script in the test-e2e app).
-- [x]: Determine a consistent way to build and execute each app. 
+- [x]: Determine a consistent way to build and execute each app.
 - [x]: When transpiling TypeScript apps, by default they are compiled to CommonJS. We can compile to ESM by setting `"module": "ESNext"` in `tsconfig.json`. However, when doing this, we must also import with file extensions (e.g. `import './module.js'` versus `import './module'`. Is it just better to include explicit file extensions in all imports? [Most](https://www.reddit.com/r/typescript/comments/1b87o96/comment/ktnxhly/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button) [sources](https://github.com/nodejs/node/issues/46006) say it's better to explicitly include the file extensions.
 
 # starter-monorepo
@@ -50,7 +50,7 @@ API tests are a lower-cost replacement for integration tests. They are essential
    ```shell
    npm run test:local -w=api-tests
    ```
-   
+
 ## Docker
 
 There is a [base.Dockerfile](.github/docker/base.Dockerfile) to build common parts for all other app images (that use Alpine Linux), except for Playwright apps because Playwright is not supported on Alpine. Build this base image first in order to build other images via `.github/docker/build-base.sh`.

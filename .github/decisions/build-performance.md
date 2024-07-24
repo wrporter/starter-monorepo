@@ -8,12 +8,12 @@ Status: proposed
 
 ## Context
 
-Validating changes both locally and in CI can be time-consuming. Timely feedback is critical to maintaining a high 
+Validating changes both locally and in CI can be time-consuming. Timely feedback is critical to maintaining a high
 development velocity. There are several areas where performance improvements can make a considerable difference:
 
 1. Turborepo cache
 2. Docker
-   1. Docker ignore file 
+   1. Docker ignore file
    2. Multi-stage builds with layer caching
    3. Prune unnecessary files and dependencies
 3. GitHub Action cache
@@ -29,7 +29,7 @@ Use the GitHub Action cache to store the turborepo cache so we don't have to mai
 
 Only build new Docker images for apps that have changes. This reduces time in building, deploying, and validating apps that have not been changed.
 
-1. Builds are about 40 seconds faster without using the GitHub Actions cache for the docker images. 
+1. Builds are about 40 seconds faster without using the GitHub Actions cache for the docker images.
 2. Builds are about 2 minutes faster without building the base image in a separate job to be shared across all apps. This is done by uploading the tar of the built image, then in the next job, downloading the tar and pushing it to a locally running registry. The other jobs then reference it. See https://docs.docker.com/build/ci/github-actions/share-image-jobs/ for more info.
 
 ### Docker
