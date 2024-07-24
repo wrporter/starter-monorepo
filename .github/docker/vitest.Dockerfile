@@ -40,7 +40,7 @@ WORKDIR /app/out/json
 ###############################################################################
 FROM base AS production
 
-COPY --from=prune /app/out/json/node_modules ./node_modules
+COPY --from=prune /app/out/json/node_modules* ./node_modules
 # TODO: Optimize the package copy to only copy package.json and dist.
 COPY --from=prune /app/out/full/packages* ./packages
 
