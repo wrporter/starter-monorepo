@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
@@ -47,6 +47,7 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: npx changeset publish
 
+# TODO: Detect changes in Dockerfiles to build all impacted apps
   detect-changes:
     name: Detect changed apps
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -76,10 +77,45 @@ jobs:
           changed_apps=$(echo '${{ steps.changed-app-directories.outputs.all_changed_files }}' | jq -c '[.[] | sub("apps/"; "")]')
           echo "apps=${changed_apps}" >> $GITHUB_OUTPUT
 
+  docker-build-base:
+    name: Build base image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set namespace
+        id: set-build-args
+        run: echo "NAMESPACE=$(basename `git rev-parse --show-toplevel`)" >> $GITHUB_ENV
+
+      - name: Build base image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: .github/docker/base.Dockerfile
+          tags: localhost:5000/${{ env.NAMESPACE }}/base-image
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          outputs: type=docker,dest=/tmp/base-image.tar
+
+      - name: Upload base image
+        uses: actions/upload-artifact@v4
+        with:
+          name: base-image
+          path: /tmp/base-image.tar
+
+# TODO: Due to how matrices work, the base image is rebuilt in each separate
+#       job. Build the base image in a previous job and load it in this job.
+#       See https://docs.docker.com/build/ci/github-actions/share-image-jobs/
   docker-build:
     name: Build docker images
     if: needs.detect-changes.outputs.changed_apps != '[]'
-    needs: detect-changes
+    needs:
+      - detect-changes
+      - docker-build-base
     runs-on: ubuntu-latest
     services:
       registry:
@@ -92,16 +128,31 @@ jobs:
       matrix:
         app: ${{ fromJson(needs.detect-changes.outputs.changed_apps) }}
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
 
       - name: Set up docker buildx
         uses: docker/setup-buildx-action@v3
         with:
           driver-opts: network=host
+
+      - name: Download base image
+        uses: actions/download-artifact@v4
+        with:
+          name: base-image
+          path: /tmp
+
+      - name: Load base image
+        run: docker load --input /tmp/base-image.tar
+
+      - name: Set build arguments
+        id: set-build-args
+        run: |
+          echo "APP_ID=$(basename `git rev-parse --show-toplevel`)-${{ matrix.app }}" >> $GITHUB_ENV
+          echo "BUILD_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          echo "BUILD_BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          echo "BUILD_DATE=$(date -u '+%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_ENV
+          echo "NAMESPACE=$(basename `git rev-parse --show-toplevel`)" >> $GITHUB_ENV
 
       - name: Determine dockerfile type from package.json
         id: determine-dockerfile
@@ -117,26 +168,6 @@ jobs:
           fi
           
           echo "dockerfile_type=${dockerfile_type}" >> $GITHUB_OUTPUT
-
-      - name: Set build arguments
-        id: set-build-args
-        run: |
-          echo "APP_ID=$(basename `git rev-parse --show-toplevel`)-${{ matrix.app }}" >> $GITHUB_ENV
-          echo "BUILD_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
-          echo "BUILD_BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
-          echo "BUILD_DATE=$(date -u '+%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_ENV
-          echo "NAMESPACE=$(basename `git rev-parse --show-toplevel`)" >> $GITHUB_ENV
-
-      - name: Build base image
-        if: ${{ matrix.app != 'test-e2e' }} # Skip base image build for test-e2e
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          file: .github/docker/base.Dockerfile
-          tags: localhost:5000/${{ env.NAMESPACE }}/base-image
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       - name: "Build app image: ${{ matrix.app }}"
         uses: docker/build-push-action@v6
