@@ -4,7 +4,7 @@
   "type": "module",
   "dockerfileType": "vitest",
   "scripts": {
-    "ci": "run-p typecheck lint ",
+    "ci": "run-p typecheck lint",
     "docker:build": "cd ../.. && APP=test-api APP_TYPE=vitest .github/docker/build-app.sh",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "npm run lint -- --fix",
