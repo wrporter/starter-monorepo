@@ -39,6 +39,8 @@ COPY . .
 # TODO: Add when E2E tests depend on packages.
 #RUN npm run build
 
+RUN npm prune --omit=dev
+
 ###############################################################################
 # Prune everything except what's necessary for the app
 ###############################################################################
@@ -50,8 +52,6 @@ ARG APP
 RUN npx turbo prune --scope=${APP} --docker
 
 WORKDIR /app/out/json
-
-RUN npm prune --omit=dev
 
 ###############################################################################
 # Production image

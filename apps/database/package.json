@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "ci": "run-p lint typecheck build",
-    "clean": "rm -rf build ",
+    "clean": "rm -rf build",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "docker:build": "cd ../.. && APP=database APP_TYPE=node .github/docker/build-app.sh",
