@@ -123,8 +123,6 @@ jobs:
           push: true
           file: .github/docker/base.Dockerfile
           tags: localhost:5000/${{ env.NAMESPACE }}/base-image
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       - name: Determine dockerfile type from package.json
         id: determine-dockerfile
@@ -156,5 +154,3 @@ jobs:
           tags: |
             ${{ env.DOCKER_REGISTRY }}/${{ env.NAMESPACE }}/${{ matrix.app }}:latest
             ${{ env.DOCKER_REGISTRY }}/${{ env.NAMESPACE }}/${{ matrix.app }}:${{ env.BUILD_SHA }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
