@@ -87,16 +87,12 @@ jobs:
       - name: Set up docker buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Set namespace
-        id: set-build-args
-        run: echo "NAMESPACE=$(basename `git rev-parse --show-toplevel`)" >> $GITHUB_ENV
-
       - name: Build base image
         uses: docker/build-push-action@v6
         with:
           context: .
           file: .github/docker/base.Dockerfile
-          tags: localhost:5000/${{ env.NAMESPACE }}/base-image
+          tags: base-image
           cache-from: type=gha
           cache-to: type=gha,mode=max
           outputs: type=docker,dest=/tmp/base-image.tar
@@ -175,7 +171,7 @@ jobs:
           context: .
           file: .github/docker/${{ steps.determine-dockerfile.outputs.dockerfile_type }}.Dockerfile
           build-args: |
-            BASE_IMAGE=localhost:5000/${{ env.NAMESPACE }}/base-image
+            BASE_IMAGE=base-image
             APP=${{ matrix.app }}
             APP_ID=${{ env.APP_ID }}
             BUILD_SHA=${{ env.GITHUB_SHA }}
