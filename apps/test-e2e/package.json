@@ -4,7 +4,7 @@
   "dockerfileType": "playwright",
   "scripts": {
     "docker:build": "cd ../.. && APP=test-e2e APP_TYPE=playwright .github/docker/build-app.sh",
-    "test": "playwright test ",
+    "test": "playwright test",
     "test:ui": "playwright test --ui"
   },
   "dependencies": {

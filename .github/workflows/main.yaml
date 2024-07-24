@@ -83,6 +83,10 @@ jobs:
 #       See https://docs.docker.com/build/ci/github-actions/share-image-jobs/
 #       However, this other approach actually takes more time due to uploading,
 #       downloading, and pushing the image to the localhost registry.
+
+# Note: Builds are about 40 seconds faster without using the GitHub Actions
+# cache for the docker images. And about 2 minutes faster without building the
+# base image in a separate job to be shared across all apps.
   docker-build:
     name: Build docker images
     if: needs.detect-changes.outputs.changed_apps != '[]'
@@ -117,6 +121,7 @@ jobs:
           echo "NAMESPACE=$(basename `git rev-parse --show-toplevel`)" >> $GITHUB_ENV
 
       - name: Build base image
+        if: matrix.app != 'test-e2e'
         uses: docker/build-push-action@v6
         with:
           context: .
