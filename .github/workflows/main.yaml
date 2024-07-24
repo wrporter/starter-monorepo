@@ -120,6 +120,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          load: true
           file: .github/docker/base.Dockerfile
           tags: ${{ env.DOCKER_REGISTRY }}/${{ env.NAMESPACE }}/base-image
           cache-from: type=gha
