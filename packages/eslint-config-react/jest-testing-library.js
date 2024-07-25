@@ -12,7 +12,11 @@ module.exports = {
     overrides: [
         {
             files: ['**/__tests__/**/*', '**/*.{spec,test}.*'],
-            extends: ['@repo/eslint-config/jest', 'plugin:jest-dom/recommended', 'plugin:testing-library/react'],
+            extends: [
+                '@repo/eslint-config/jest',
+                'plugin:jest-dom/recommended',
+                'plugin:testing-library/react',
+            ],
         },
     ],
 };

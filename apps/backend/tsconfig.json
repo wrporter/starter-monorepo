@@ -3,6 +3,7 @@
   "include": ["src"],
   "exclude": ["**/build", "coverage"],
   "compilerOptions": {
+    "types": ["vitest/globals"],
     "outDir": "build",
     "module": "ESNext"
   }

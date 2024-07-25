@@ -12,6 +12,8 @@
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "npm run lint -- --fix",
     "start": "NODE_ENV=production node ./build/main.js",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "tsc -b"
   },
   "dependencies": {
@@ -26,9 +28,11 @@
     "@repo/eslint-config": "*",
     "@repo/tsconfig": "*",
     "@types/node": "20.14.10",
+    "@vitest/coverage-v8": "2.0.4",
     "eslint": "8.57.0",
     "pino-pretty": "11.2.1",
     "tsx": "4.16.2",
-    "typescript": "5.5.3"
+    "typescript": "5.5.3",
+    "vitest": "2.0.4"
   }
 }
