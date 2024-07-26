@@ -1,27 +1,30 @@
-const reactRules = require('./rules/react');
+import config from '@repo/eslint-config';
+import pluginJestDom from 'eslint-plugin-jest-dom';
+// TODO: Add once jsx-a11y supports eslint 9 / flat configs
+// import pluginJsxA11y from 'eslint-plugin-jsx-a11y';
+import pluginReact from 'eslint-plugin-react';
+import pluginReactHooks from 'eslint-plugin-react-hooks';
+import pluginTestingLibrary from 'eslint-plugin-testing-library';
 
-/**
- * @see https://github.com/eslint/eslint/issues/3458
- * @see https://www.npmjs.com/package/@rushstack/eslint-patch
- */
-require('@rushstack/eslint-patch/modern-module-resolution');
+/** @type {import("eslint").Linter.Config} */
+export default [
+  ...config,
+  pluginReact.configs.flat.recommended,
+  pluginJestDom.configs['flat/recommended'],
 
-/**
- * @type {import("eslint").Linter.Config}
- */
-module.exports = {
-    extends: ['airbnb', 'airbnb-typescript', '@repo/eslint-config'],
-    env: {
-        browser: true,
+  {
+    plugins: {
+      'react-hooks': pluginReactHooks,
+      'testing-library': pluginTestingLibrary,
     },
-    overrides: [
-        {
-            // Specifying overrides allows us to provide default file extensions.
-            // See https://github.com/eslint/eslint/issues/2274
-            files: ['**/*.{jsx,tsx}'],
-            rules: {
-                ...reactRules,
-            },
-        },
-    ],
-};
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+    rules: {
+      ...pluginReactHooks.configs.recommended.rules,
+      'react/react-in-jsx-scope': 'off',
+    },
+  },
+];

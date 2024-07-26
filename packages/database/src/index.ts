@@ -1,1 +1,1 @@
-export { contacts } from './schema';
+export { contacts } from './schema.js';

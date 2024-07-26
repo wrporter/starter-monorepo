@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@repo/database": "*",
-    "drizzle-orm": "0.32.0",
-    "effect": "3.5.4",
+    "drizzle-orm": "0.32.1",
+    "effect": "3.5.8",
     "fastify": "4.28.1",
     "fastify-graceful-shutdown": "4.0.1",
     "postgres": "3.4.4"
@@ -27,12 +27,12 @@
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/tsconfig": "*",
-    "@types/node": "20.14.10",
+    "@types/node": "20.14.12",
     "@vitest/coverage-v8": "2.0.4",
-    "eslint": "8.57.0",
-    "pino-pretty": "11.2.1",
+    "eslint": "9.7.0",
+    "pino-pretty": "11.2.2",
     "tsx": "4.16.2",
-    "typescript": "5.5.3",
+    "typescript": "5.5.4",
     "vitest": "2.0.4"
   }
 }

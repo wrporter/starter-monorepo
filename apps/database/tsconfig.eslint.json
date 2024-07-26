@@ -1,5 +1,4 @@
 {
-  "extends": "@repo/tsconfig/node.json",
-  "include": ["**/*", ".*"],
-  "exclude": ["**/build", "coverage"]
+  "extends": "./tsconfig.json",
+  "include": ["**/*", ".*"]
 }

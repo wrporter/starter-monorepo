@@ -1,16 +1,22 @@
 {
   "name": "test-e2e",
   "private": true,
+  "type": "module",
   "dockerfileType": "playwright",
   "scripts": {
     "docker:build": "cd ../.. && APP=test-e2e APP_TYPE=playwright .github/docker/build-app.sh",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix",
     "test": "playwright test",
     "test:ui": "playwright test --ui"
   },
   "dependencies": {
-    "@playwright/test": "1.45.2"
+    "@playwright/test": "1.45.3"
   },
   "devDependencies": {
-    "@types/node": "20.14.11"
+    "@repo/eslint-config": "*",
+    "@repo/tsconfig": "*",
+    "@types/node": "20.14.12",
+    "eslint": "9.7.0"
   }
 }

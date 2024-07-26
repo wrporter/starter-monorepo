@@ -24,9 +24,9 @@
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/tsconfig": "*",
-    "@swc/core": "1.6.13",
-    "drizzle-orm": "0.32.0",
-    "tsup": "8.1.1",
-    "typescript": "5.5.3"
+    "drizzle-orm": "0.32.1",
+    "eslint": "9.7.0",
+    "tsup": "8.2.3",
+    "typescript": "5.5.4"
   }
 }

@@ -31,9 +31,19 @@ RUN apk add --no-cache libc6-compat
 COPY --from=artifact /app .
 
 ARG APP
-RUN npx turbo prune --scope=${APP} --docker
+
+RUN npx turbo prune ${APP} --docker
 
 WORKDIR /app/out/json
+
+# TODO: Because we have some packages with production dependencies (e.g.
+# eslint-config), those get recognized as production dependencies in the final
+# docker image, more than doubling the size of the image. Turbo plans to
+# account for this and it's not done yet.
+# One way to get around this is to move the packages with heavy production
+# dependencies out of this monorepo and publish them.
+# See https://github.com/vercel/turbo/issues/1100
+RUN npm prune --omit=dev
 
 ###############################################################################
 # Production image
@@ -54,7 +64,7 @@ ENV BUILD_DATE=$BUILD_DATE
 
 ENV NODE_ENV production
 
-COPY --from=prune /app/out/json/node_modules* ./node_modules
+COPY --from=prune /app/node_modules* ./node_modules
 # TODO: Optimize the package copy to only copy package.json and dist.
 COPY --from=prune /app/out/full/packages* ./packages
 

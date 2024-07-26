@@ -25,12 +25,12 @@
     "release": "changeset publish",
     "test": "turbo run test --filter=!test-api --filter=!test-e2e",
     "update-dependencies": "npx npm-check-updates -u --root -ws",
-    "update-package-lock": "rm -rf **/node_modules package-lock.json && npm install"
+    "update-package-lock": "npx rimraf **/node_modules package-lock.json && npm install"
   },
   "devDependencies": {
     "@changesets/cli": "2.27.7",
     "@repo/prettier-config": "*",
-    "prettier": "3.3.2",
-    "turbo": "2.0.7"
+    "prettier": "3.3.3",
+    "turbo": "2.0.9"
   }
 }

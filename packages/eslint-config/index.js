@@ -1,56 +1,123 @@
-const baseRules = require('./rules/base');
+import jsEslint from '@eslint/js';
+import pluginImportX from 'eslint-plugin-import-x';
+import pluginJsdoc from 'eslint-plugin-jsdoc';
+import pluginUnusedImports from 'eslint-plugin-unused-imports';
+import pluginVitest from 'eslint-plugin-vitest';
+import globals from 'globals';
+import tsEslint from 'typescript-eslint';
 
-/**
- * @see https://github.com/eslint/eslint/issues/3458
- * @see https://www.npmjs.com/package/@rushstack/eslint-patch
- */
-require('@rushstack/eslint-patch/modern-module-resolution');
-
-/**
- * @type {import("eslint").Linter.Config}
- */
-module.exports = {
-    ignorePatterns: ['dist', '**/build', 'coverage', '**/*.generated.*'],
-    parserOptions: {
-        sourceType: 'module',
-        project: './tsconfig.json',
-    },
-    env: {
-        es2021: true,
-        node: true,
-    },
-    extends: ['airbnb-base', 'airbnb-typescript/base', 'plugin:jsdoc/recommended'],
-    plugins: ['node', 'import', 'unused-imports', 'jsdoc'],
-    settings: {
-        'import/resolver': {
-            typescript: {},
-            node: {
-                extensions: ['.js', '.mjs', '.cjs', '.jsx', '.ts', '.cts', '.mts', '.tsx', '.d.ts'],
-            },
-        },
-    },
-    overrides: [
-        {
-            // Specifying overrides allows us to provide default file extensions.
-            // See https://github.com/eslint/eslint/issues/2274
-            files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-            rules: {
-                ...baseRules,
-            },
-        },
-        {
-            // allow for CommonJS files to use require
-            files: '**/*.{js,cjs}',
-            rules: {
-                '@typescript-eslint/no-var-requires': 'off',
-            },
-        },
-        {
-            // allow config files to use default exports
-            files: '**/*.{config,generated}.{js,mjs,ts,mts}',
-            rules: {
-                'import/no-default-export': 'off',
-            },
-        },
+/** @type {import("eslint").Linter.Config} */
+export default tsEslint.config(
+  {
+    ignores: [
+      '**/.cache/**',
+      '**/node_modules/**',
+      '**/build/**',
+      '**/public/build/**',
+      '**/playwright-report/**',
+      '**/coverage/**',
+      '**/results/**',
+      '**/server-build/**',
+      '**/dist/**',
     ],
-};
+  },
+
+  jsEslint.configs.recommended,
+  ...tsEslint.configs.recommendedTypeCheckedOnly,
+
+  {
+    name: 'typescript',
+    languageOptions: {
+      parser: tsEslint.parser,
+      parserOptions: {
+        project: true,
+      },
+    },
+    rules: {
+      'no-unused-vars': 'off',
+      'no-unused-expressions': 'off',
+      'no-useless-constructor': 'off',
+    },
+  },
+
+  {
+    name: 'import-x',
+    plugins: { 'import-x': pluginImportX },
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+    rules: {
+      'import-x/extensions': ['error', 'ignorePackages', { js: 'always' }],
+      'import-x/no-extraneous-dependencies': [
+        'error',
+        { devDependencies: ['**/*.{test,config,build}.*'] },
+      ],
+      'import-x/order': [
+        'error',
+        {
+          groups: ['builtin', 'external', 'internal', ['sibling', 'parent'], 'index', 'unknown'],
+          'newlines-between': 'always',
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
+        },
+      ],
+      'sort-imports': [
+        'error',
+        {
+          ignoreCase: false,
+          ignoreDeclarationSort: true, // use eslint-plugin-import-x for this instead
+          ignoreMemberSort: false,
+          memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+          allowSeparatedGroups: true,
+        },
+      ],
+    },
+  },
+
+  {
+    name: 'unused-imports',
+    plugins: { 'unused-imports': pluginUnusedImports },
+    rules: { 'unused-imports/no-unused-imports': 'error' },
+  },
+
+  pluginVitest.configs.recommended,
+  {
+    name: 'vitest',
+    files: ['**/*.test.*'],
+    rules: {
+      // allow for custom expect functions
+      'vitest/expect-expect': ['error', { assertFunctionNames: ['expect*'] }],
+    },
+  },
+
+  pluginJsdoc.configs['flat/recommended'],
+  {
+    name: 'jsdoc',
+    plugins: { jsdoc: pluginJsdoc },
+    rules: {
+      // Do not require by default, only in libraries
+      'jsdoc/require-jsdoc': 'off',
+      // Ignore types because we infer this from TypeScript
+      'jsdoc/require-param-type': 'off',
+      'jsdoc/require-property-type': 'off',
+      'jsdoc/require-returns-type': 'off',
+      'jsdoc/require-param': 'off',
+      'jsdoc/require-returns': 'off',
+    },
+  },
+
+  {
+    name: 'overrides',
+    files: ['**/*.test.*', '**/*.{js,cjs,mjs,jsx}'],
+    rules: {
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+    },
+  },
+);

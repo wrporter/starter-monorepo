@@ -9,6 +9,7 @@
     "clean": "rm -rf build",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
+    "dev": "NODE_ENV=development tsx --env-file=.env src/main.ts",
     "docker:build": "cd ../.. && APP=database APP_TYPE=node .github/docker/build-app.sh",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "npm run lint -- --fix",
@@ -18,14 +19,14 @@
   "dependencies": {
     "@repo/database": "*",
     "drizzle-kit": "0.23.0",
-    "drizzle-orm": "0.32.0",
+    "drizzle-orm": "0.32.1",
     "postgres": "3.4.4"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/tsconfig": "*",
-    "@types/node": "20.14.10",
-    "eslint": "8.57.0",
-    "typescript": "5.5.3"
+    "@types/node": "20.14.12",
+    "eslint": "9.7.0",
+    "typescript": "5.5.4"
   }
 }

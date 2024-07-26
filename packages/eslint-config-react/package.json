@@ -2,34 +2,32 @@
   "name": "@repo/eslint-config-react",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "main": "index.js",
   "files": [
     "README.md",
-    "rules",
-    "[!.]*.js"
+    "index.js"
   ],
+  "exports": {
+    ".": "./index.js"
+  },
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix"
   },
   "peerDependencies": {
-    "eslint": ">= 8.24 < 9"
+    "eslint": "> 9 < 10"
   },
   "dependencies": {
     "@repo/eslint-config": "*",
-    "@rushstack/eslint-patch": "1.10.3",
-    "eslint-config-airbnb": "19.0.4",
-    "eslint-config-airbnb-typescript": "18.0.0",
     "eslint-plugin-jest-dom": "5.4.0",
-    "eslint-plugin-jsx-a11y": "6.9.0",
-    "eslint-plugin-react": "7.34.3",
+    "eslint-plugin-react": "7.35.0",
     "eslint-plugin-react-hooks": "4.6.2",
     "eslint-plugin-testing-library": "6.2.2"
   },
   "devDependencies": {
     "@repo/tsconfig": "*",
-    "eslint": "8.57.0",
-    "eslint-import-resolver-typescript": "3.6.1"
+    "eslint": "9.7.0"
   }
 }
