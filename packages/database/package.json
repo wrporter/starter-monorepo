@@ -2,7 +2,7 @@
   "name": "@repo/database",
   "version": "1.0.0",
   "private": true,
-  "module": "dist/index.mjs",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
