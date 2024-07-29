@@ -1,4 +1,4 @@
 {
-  "extends": "@repo/tsconfig/api-tests.json",
+  "extends": "@wesp-up/tsconfig/api-tests.json",
   "include": ["test"]
 }

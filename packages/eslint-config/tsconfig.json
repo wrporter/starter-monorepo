@@ -1,8 +1,0 @@
-{
-  "extends": "@repo/tsconfig/lib.json",
-  "compilerOptions": {
-    "outDir": "dist"
-  },
-  "include": ["**/*", ".*"],
-  "exclude": ["dist", "coverage"]
-}

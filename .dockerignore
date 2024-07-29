@@ -22,9 +22,7 @@ packages/*/**
 !apps/**/*.json
 !apps/**/*.ts
 
-!packages/**/rules
 !packages/**/src
-!packages/**/*.cjs
 !packages/**/*.js
 !packages/**/*.json
 !packages/**/*.ts

@@ -1,5 +1,5 @@
-import config from '@repo/eslint-config';
-import configLib from '@repo/eslint-config/lib';
+import config from '@wesp-up/eslint-config';
+import configLib from '@wesp-up/eslint-config/lib';
 
 export default [
   ...config,

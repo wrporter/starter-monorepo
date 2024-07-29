@@ -1,7 +1,7 @@
-import { FastifyInstance } from 'fastify';
+import fastify from 'fastify';
 
-import { getById } from './contact.repo';
-import { createServer } from '../../app.js';
+import { getById } from './contact.repo.js';
+import { contactRouter } from './contact.router.js';
 
 const { id, contact, createContactFields } = vi.hoisted(() => {
   const id = '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d';
@@ -15,7 +15,7 @@ const { id, contact, createContactFields } = vi.hoisted(() => {
   return { id, contact, createContactFields };
 });
 
-vi.mock('./contact.repo.js', () => ({
+vi.mock('./contact.repo', () => ({
   create: vi
     .fn()
     .mockImplementation((contact) => Promise.resolve({ ...contact, ...createContactFields })),
@@ -24,16 +24,14 @@ vi.mock('./contact.repo.js', () => ({
   deleteById: vi.fn().mockResolvedValue(undefined),
 }));
 
-let app: FastifyInstance;
-beforeAll(async () => {
-  app = await createServer();
-});
+const app = fastify();
+app.register(contactRouter);
 afterAll(() => app.close());
 
 it('lists contacts', async () => {
   const response = await app.inject({
     method: 'GET',
-    url: '/contacts',
+    url: '/v1/contacts',
   });
 
   expect(response.statusCode).toBe(200);
@@ -44,7 +42,7 @@ describe('Create', () => {
   it('creates a contact', async () => {
     const response = await app.inject({
       method: 'POST',
-      url: '/contacts',
+      url: '/v1/contacts',
       body: contact,
     });
 
@@ -60,7 +58,7 @@ describe('Create', () => {
   it('requires a properly formatted email address', async () => {
     const response = await app.inject({
       method: 'POST',
-      url: '/contacts',
+      url: '/v1/contacts',
       body: { ...contact, email: 'invalid-email' },
     });
 
@@ -78,7 +76,7 @@ describe('Get', () => {
   it('gets a contact', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: `/contacts/${id}`,
+      url: `/v1/contacts/${id}`,
       body: contact,
     });
 
@@ -94,13 +92,14 @@ describe('Get', () => {
 
     const response = await app.inject({
       method: 'GET',
-      url: `/contacts/${id}`,
+      url: `/v1/contacts/${id}`,
       body: contact,
     });
 
     expect(response.statusCode).toBe(404);
     expect(JSON.parse(response.payload)).toMatchObject({
-      message: `Contact id '${id}' does not exist`,
+      message: `Contact not found`,
+      contactId: id,
     });
   });
 });
@@ -109,7 +108,7 @@ describe('Delete', () => {
   it('deletes a contact', async () => {
     const response = await app.inject({
       method: 'DELETE',
-      url: `/contacts/${id}`,
+      url: `/v1/contacts/${id}`,
       body: contact,
     });
 

@@ -22,10 +22,10 @@
     "drizzle-orm": ">= 0.32.0 < 1"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/tsconfig": "*",
+    "@wesp-up/eslint-config": "2.0.0",
+    "@wesp-up/tsconfig": "2.0.0",
     "drizzle-orm": "0.32.1",
-    "eslint": "9.7.0",
+    "eslint": "9.8.0",
     "tsup": "8.2.3",
     "typescript": "5.5.4"
   }

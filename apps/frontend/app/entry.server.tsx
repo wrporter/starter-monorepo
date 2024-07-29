@@ -12,7 +12,7 @@ import { RemixServer } from '@remix-run/react';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
 
-import { MuiProvider } from '~/lib/mui/MuiProvider.jsx';
+import { MuiProvider } from '~/lib/mui/MuiProvider';
 
 const ABORT_DELAY = 5_000;
 

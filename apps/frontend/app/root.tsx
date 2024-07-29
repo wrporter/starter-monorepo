@@ -13,9 +13,9 @@ import { PropsWithChildren } from 'react';
 
 import tailwindStyleSheetUrl from './tailwind.css?url';
 
-import { getMuiLinks } from '~/lib/mui/getMuiLinks.js';
-import { MuiDocument } from '~/lib/mui/MuiDocument.jsx';
-import { MuiMeta } from '~/lib/mui/MuiMeta.jsx';
+import { getMuiLinks } from '~/lib/mui/getMuiLinks';
+import { MuiDocument } from '~/lib/mui/MuiDocument';
+import { MuiMeta } from '~/lib/mui/MuiMeta';
 
 export const links: LinksFunction = () => [
   { rel: 'stylesheet', href: tailwindStyleSheetUrl },
@@ -63,7 +63,6 @@ export function ErrorBoundary() {
         break;
 
       default:
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         throw new Error(error.data || error.statusText);
     }
 

@@ -1,4 +1,3 @@
-import { Effect } from 'effect';
 import type { FastifyPlugin } from 'fastify';
 
 import type { Contact } from './contact.repo.js';
@@ -17,27 +16,22 @@ export const contactRouter: FastifyPlugin = (app, _, done) => {
     },
   });
 
-  app.get('/contacts', () => list());
+  app.get('/v1/contacts', () => list());
 
-  app.get<{ Params: ContactParams }>('/contacts/:id', {
+  app.get<{ Params: ContactParams }>('/v1/contacts/:id', {
     schema: { params: { $ref: 'ContactParams' } },
-    handler: async (request, reply) =>
-      // TODO: Unwrap unexpected errors from Effect to know the cause. E.g.
-      //  database connection failure.
-      Effect.runPromise(
-        Effect.match(getById(request.params.id), {
-          onSuccess: (contact) => reply.send(contact),
-          onFailure: (error) => {
-            if (error._tag === 'NotFoundError') {
-              return reply.status(404).send({ message: error.message });
-            }
-            return error;
-          },
-        }),
-      ),
+    handler: async (request, reply) => {
+      const contact = await getById(request.params.id);
+      // Example of adding properties to request logs
+      request.log = request.log.child({ contactId: request.params.id });
+      if (contact) {
+        return reply.send(contact);
+      }
+      return reply.status(404).send({ message: 'Contact not found', contactId: request.params.id });
+    },
   });
 
-  app.post('/contacts', {
+  app.post('/v1/contacts', {
     schema: {
       body: {
         type: 'object',
@@ -55,12 +49,10 @@ export const contactRouter: FastifyPlugin = (app, _, done) => {
     },
   });
 
-  app.delete<{ Params: ContactParams }>('/contacts/:id', {
+  app.delete<{ Params: ContactParams }>('/v1/contacts/:id', {
     schema: { params: { $ref: 'ContactParams' } },
     handler: async (request, reply) => {
-      // TODO: Unwrap unexpected errors from Effect to know the cause. E.g.
-      //  database connection failure.
-      await Effect.runPromise(deleteById(request.params.id));
+      await deleteById(request.params.id);
       reply.status(204).send();
     },
   });

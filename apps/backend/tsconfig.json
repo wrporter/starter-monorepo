@@ -1,10 +1,9 @@
 {
-  "extends": "@repo/tsconfig/node.json",
+  "extends": "@wesp-up/tsconfig/node.json",
   "include": ["src"],
   "exclude": ["**/build", "coverage"],
   "compilerOptions": {
     "types": ["vitest/globals"],
-    "outDir": "build",
-    "module": "ESNext"
+    "outDir": "build"
   }
 }

@@ -1,4 +1,4 @@
-import config from '@repo/eslint-config-react';
+import config from '@wesp-up/eslint-config-react';
 
 export default [
   ...config,

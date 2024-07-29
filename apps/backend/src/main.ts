@@ -1,27 +1,11 @@
-import { createServer } from './app.js';
+import { createServer } from './lib/server/server.js';
+import { contactRouter } from './modules/contacts/contact.router.js';
 
-const envToLogger = {
-  development: {
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        translateTime: 'HH:MM:ss Z',
-        ignore: 'pid,hostname',
-      },
-    },
-  },
-  production: true,
-  test: false,
-};
+const servicePrefix = '/contact-service';
+const server = createServer({ pathPrefix: servicePrefix });
 
-const app = createServer({
-  logger: envToLogger[(process.env.NODE_ENV as keyof typeof envToLogger) ?? 'development'],
-});
+server.app.register(contactRouter, { prefix: servicePrefix });
 
-app.listen({ host: '0.0.0.0', port: 3000 }, (err, address) => {
-  if (err) {
-    app.log.error(err);
-    process.exit(1);
-  }
-  app.log.info(`Server listening at ${address}`);
-});
+// TODO: Add deep health check for dependencies (e.g. database)
+
+await server.start(3000);

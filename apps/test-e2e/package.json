@@ -14,9 +14,9 @@
     "@playwright/test": "1.45.3"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/tsconfig": "*",
-    "@types/node": "20.14.12",
-    "eslint": "9.7.0"
+    "@wesp-up/eslint-config": "2.0.0",
+    "@wesp-up/tsconfig": "2.0.0",
+    "@types/node": "22.0.0",
+    "eslint": "9.8.0"
   }
 }

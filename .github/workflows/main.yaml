@@ -48,9 +48,12 @@ jobs:
         run: npx changeset publish
 
   # TODO: Detect changes in Dockerfiles to build all impacted apps. Are there
-  #       other files we should also consider, such as this workflow?
+  # other files we should also consider, such as this workflow?
   detect-changes:
     name: Detect changed apps
+    # TODO: Run on changes to pull requests for all changes between main and
+    # the current branch. This will ensure higher quality, especially if
+    # changes were made to the Docker builds.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:

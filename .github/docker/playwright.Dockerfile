@@ -39,8 +39,6 @@ COPY . .
 # TODO: Add when E2E tests depend on packages.
 #RUN npm run build
 
-RUN npm prune --omit=dev
-
 ###############################################################################
 # Prune everything except what's necessary for the app
 ###############################################################################
@@ -61,6 +59,10 @@ WORKDIR /app/out/json
 # One way to get around this is to move the packages with heavy production
 # dependencies out of this monorepo and publish them.
 # See https://github.com/vercel/turbo/issues/1100
+# We can also re-install dependencies after turbo pruning to install only what
+# is necessary.
+RUN npm ci --omit=dev --loglevel=warn
+# For some reason, not all dev dependencies are pruned. This is a workaround.
 RUN npm prune --omit=dev
 
 ###############################################################################
@@ -68,7 +70,7 @@ RUN npm prune --omit=dev
 ###############################################################################
 FROM base AS production
 
-COPY --from=prune /app/node_modules* ./node_modules
+COPY --from=prune /app/out/json/node_modules* ./node_modules
 # TODO: Optimize the package copy to only copy package.json and dist.
 # TODO: Add when E2E tests depend on packages.
 #COPY --from=prune /app/out/full/packages ./packages

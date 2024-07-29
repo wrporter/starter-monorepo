@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/tsconfig/node.json",
+  "extends": "@wesp-up/tsconfig/node.json",
   "include": ["**/*"],
   "exclude": ["**/playwright-report", "test-results"]
 }

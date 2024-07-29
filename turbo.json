@@ -18,9 +18,6 @@
       "dependsOn": ["^build"],
       "outputs": ["docs"]
     },
-    "docker:build": {
-      "cache": false
-    },
     "test": {
       "dependsOn": ["build"],
       "outputs": []

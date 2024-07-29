@@ -1,4 +1,4 @@
-import config from '@repo/eslint-config';
+import config from '@wesp-up/eslint-config';
 
 export default [
   ...config,
