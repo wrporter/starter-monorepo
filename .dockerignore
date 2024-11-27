@@ -3,6 +3,8 @@
 !.npmrc
 !package.json
 !package-lock.json
+!.prettierignore
+!prettier.config.cjs
 !turbo.json
 
 !apps
@@ -10,19 +12,20 @@
 apps/*/**
 packages/*/**
 
-!apps/**/app
-!apps/**/migrations
-!apps/**/public
-!apps/**/server
-!apps/**/src
-!apps/**/test
-!apps/**/tests
-!apps/**/*.cjs
-!apps/**/*.js
-!apps/**/*.json
-!apps/**/*.ts
+!apps/*/app
+!apps/*/migrations
+!apps/*/scripts
+!apps/*/server
+!apps/*/src
+!apps/*/start.sh
+!apps/*/test
+!apps/*/tests
+!apps/*/*.cjs
+!apps/*/*.js
+!apps/*/*.json
+!apps/*/*.ts
 
-!packages/**/src
-!packages/**/*.js
-!packages/**/*.json
-!packages/**/*.ts
+!packages/*/src
+!packages/*/*.js
+!packages/*/*.json
+!packages/*/*.ts

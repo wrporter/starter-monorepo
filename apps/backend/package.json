@@ -8,7 +8,7 @@
     "ci": "run-p lint typecheck test:coverage build",
     "clean": "rm -rf build coverage",
     "dev": "NODE_ENV=development tsx watch --env-file=.env src/main.ts",
-    "docker:build": "cd ../.. && APP=backend APP_TYPE=node .github/docker/build-app.sh",
+    "docker:build": "cd ../.. && apps/backend/.ci/docker-build.sh",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "npm run lint -- --fix",
     "start": "npm run build && NODE_ENV=production node ./build/main.js",
@@ -17,29 +17,25 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
-    "@fastify/compress": "7.0.3",
-    "@promster/fastify": "14.0.0",
-    "@promster/server": "14.0.0",
     "@repo/database": "*",
-    "drizzle-orm": "0.32.1",
-    "fastify": "4.28.1",
-    "fastify-graceful-shutdown": "4.0.1",
-    "fastify-plugin": "4.5.1",
-    "pino": "9.3.2",
-    "postgres": "3.4.4",
+    "@wesp-up/express": "3.0.1",
+    "drizzle-orm": "0.36.4",
+    "express": "4.21.1",
+    "postgres": "3.4.5",
     "prom-client": "15.1.3",
-    "uuid": "10.0.0"
+    "uuid": "11.0.3"
   },
   "devDependencies": {
-    "@types/node": "22.0.0",
+    "@types/node": "22.10.0",
+    "@types/supertest": "6.0.2",
     "@types/uuid": "10.0.0",
-    "@vitest/coverage-v8": "2.0.4",
-    "@wesp-up/eslint-config": "2.0.0",
+    "@vitest/coverage-v8": "2.1.6",
+    "@wesp-up/eslint-config": "2.1.0",
     "@wesp-up/tsconfig": "2.0.0",
-    "eslint": "9.8.0",
-    "pino-pretty": "11.2.2",
-    "tsx": "4.16.2",
-    "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "eslint": "9.15.0",
+    "supertest": "7.0.0",
+    "tsx": "4.19.2",
+    "typescript": "5.7.2",
+    "vitest": "2.1.6"
   }
 }

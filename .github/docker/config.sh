@@ -21,7 +21,7 @@ BASE_PATH="${NAMESPACE}/base"
 BASE_HOST_PATH="${DOCKER_HOST}/${BASE_PATH}"
 BASE_TAG="${BASE_HOST_PATH}:${GIT_COMMIT}"
 
-function buildDocker() {
+function dockerBuild() {
   docker build \
     --label "build-info.build-time=${BUILD_DATE}" \
     --label "build-info.git-branch=${GIT_BRANCH_NAME}" \

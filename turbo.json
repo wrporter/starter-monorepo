@@ -1,12 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [".github/workflows/main.yaml"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", "build/**"]
-    },
-    "ci": {
-      "dependsOn": ["^ci"]
     },
     "clean": {
       "cache": false
@@ -15,32 +13,34 @@
       "cache": false
     },
     "docs": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["build"],
       "outputs": ["docs"]
     },
+    "docker:build": {},
     "test": {
-      "dependsOn": ["build"],
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "test:coverage": {
-      "dependsOn": ["build"],
-      "outputs": []
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
     },
     "lint": {
-      "dependsOn": ["build"],
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "lint:fix": {
+      "dependsOn": ["^build"],
       "outputs": []
     },
-    "format": {
+    "//#format:check": {
       "outputs": []
     },
     "publish": {
       "dependsOn": ["build"]
     },
     "typecheck": {
-      "dependsOn": ["build"],
+      "dependsOn": ["^build"],
       "outputs": []
     }
   }

@@ -1,5 +1,5 @@
 {
-  "name": "database",
+  "name": "database-migrator",
   "private": true,
   "type": "module",
   "dockerfileType": "node",
@@ -10,7 +10,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "dev": "NODE_ENV=development tsx --env-file=.env src/main.ts",
-    "docker:build": "cd ../.. && APP=database APP_TYPE=node .github/docker/build-app.sh",
+    "docker:build": "cd ../.. && apps/database-migrator/.ci/docker-build.sh",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "npm run lint -- --fix",
     "start": "NODE_ENV=production node ./build/main.js",
@@ -18,15 +18,15 @@
   },
   "dependencies": {
     "@repo/database": "*",
-    "drizzle-kit": "0.23.0",
-    "drizzle-orm": "0.32.1",
-    "postgres": "3.4.4"
+    "drizzle-kit": "0.28.1",
+    "drizzle-orm": "0.36.4",
+    "postgres": "3.4.5"
   },
   "devDependencies": {
-    "@wesp-up/eslint-config": "2.0.0",
+    "@wesp-up/eslint-config": "2.1.0",
     "@wesp-up/tsconfig": "2.0.0",
-    "@types/node": "22.0.0",
-    "eslint": "9.8.0",
-    "typescript": "5.5.4"
+    "@types/node": "22.10.0",
+    "eslint": "9.15.0",
+    "typescript": "5.7.2"
   }
 }
