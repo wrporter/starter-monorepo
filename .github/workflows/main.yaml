@@ -39,7 +39,7 @@ jobs:
         run: npm run ci
 
       - name: 🐳 Build Docker images
-        run: npx turbo run build:docker
+        run: npx turbo run docker:build
 
       # TODO: Push docker images on main
       # TODO: Deploy docker images to dev environment on main
