@@ -32,6 +32,14 @@ RUN npm install --global turbo
 
 ARG APP
 
+ARG TURBO_API
+ARG TURBO_TEAM
+ARG TURBO_TOKEN
+
+ENV TURBO_API=$TURBO_API
+ENV TURBO_TEAM=$TURBO_TEAM
+ENV TURBO_TOKEN=$TURBO_TOKEN
+
 COPY --from=prune /app/out/json/ .
 
 # Install dependencies
