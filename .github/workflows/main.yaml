@@ -12,12 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
+      - name: 🧑‍💻 Check out code
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
-      - name: Setup Node.js environment
+      - name: ♻️ Setup Node.js environment
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -29,15 +29,21 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Cache for Turborepo
+      - name: 🏎️ Cache for Turborepo
         uses: rharkor/caching-for-turbo@v1.5
 
       - name: 📦 Install dependencies
         run: npm install
 
       - name: 🛠️ Build
-        run: npm run ci:github
-# TODO: Package publishing can happen in a separate async job.
-#      - name: Publish packages
-#        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-#        run: npx changeset publish
+        run: npm run ci
+
+      - name: 🐳 Build Docker images
+        run: npx turbo run build:docker
+
+      # TODO: Push docker images on main
+      # TODO: Deploy docker images to dev environment on main
+
+      - name: 🚀 Publish packages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx changeset publish
