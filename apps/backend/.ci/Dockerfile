@@ -46,7 +46,7 @@ ENV TURBO_TEAM=$TURBO_TEAM
 ENV TURBO_TOKEN=$TURBO_TOKEN
 
 # TODO: Remove, used for debugging
-RUN echo env | sort
+RUN env | sort
 
 COPY --from=prune /app/out/json/ .
 
