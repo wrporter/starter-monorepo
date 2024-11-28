@@ -8,6 +8,7 @@ on:
 
 env:
   TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+  TURBO_TELEMETRY_DISABLED: 1
 
 jobs:
   build:
@@ -23,7 +24,7 @@ jobs:
       - name: ♻️ Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: 💿 Restore cached node_modules
