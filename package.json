@@ -16,7 +16,7 @@
     "changeset": "changeset",
     "changeset:apply": "changeset version",
     "ci": "turbo run //#format:check lint typecheck test:coverage build",
-    "ci:github": "turbo run //#format:check docker:build",
+    "ci:github": "npm run ci -- --affected",
     "clean": "rm -rf **/node_modules **/.turbo",
     "dev": "turbo run dev",
     "docker:build": "turbo run docker:build",

@@ -36,7 +36,7 @@ jobs:
         run: npm install
 
       - name: 🛠️ Build
-        run: npm run ci
+        run: npm run ci:github
 
       - name: 🐳 Build Docker images
         run: npx turbo run docker:build
