@@ -16,7 +16,9 @@
       "dependsOn": ["build"],
       "outputs": ["docs"]
     },
-    "docker:build": {},
+    "docker:build": {
+      "passThroughEnv": ["TURBO_API", "TURBO_TEAM", "TURBO_TOKEN"]
+    },
     "test": {
       "dependsOn": ["^build"],
       "outputs": []
