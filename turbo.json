@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [".github/workflows/main.yaml"],
+  "globalDependencies": [".github/workflows/main.yaml", ".github/docker/config.sh"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
@@ -17,7 +17,7 @@
       "outputs": ["docs"]
     },
     "docker:build": {
-      "passThroughEnv": ["TURBO_API", "TURBO_TEAM", "TURBO_TOKEN"]
+      "env": ["TURBO_API", "TURBO_TEAM", "TURBO_TOKEN"]
     },
     "test": {
       "dependsOn": ["^build"],
