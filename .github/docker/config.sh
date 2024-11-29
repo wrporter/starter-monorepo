@@ -29,7 +29,7 @@ function dockerBuild() {
     --label "build-info.git-repo=${GIT_REPO_URL}" \
     --label "build-info.git-user-email=${GIT_AUTHOR_EMAIL}" \
     --label "build-info.slack-channel=${SLACK_CHANNEL}" \
-    --build-arg TURBO_API="http://host.docker.internal:${TURBOGHA_PORT:-"41230"}" \
+    --build-arg TURBO_API="http://172.17.0.1:${TURBOGHA_PORT:-"41230"}" \
     --build-arg TURBO_TEAM=${TURBO_TEAM} \
     --build-arg TURBO_TOKEN=${TURBO_TOKEN} \
     $@
