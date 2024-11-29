@@ -39,6 +39,11 @@ jobs:
       - name: 📦 Install dependencies
         run: npm install
 
+      - name: Find Docker host IP
+        run: |
+          ip=$(docker run --rm alpine /bin/sh -c "apk update > /dev/null && apk add iproute2 > /dev/null && ip -4 route show default | cut -d' ' -f3")
+          echo "DOCKER_HOST_IP=${ip}" >> $GITHUB_ENV
+
       - name: 🛠️ Build
         run: npm run ci:github
 
