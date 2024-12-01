@@ -39,6 +39,11 @@ jobs:
       - name: 📦 Install dependencies
         run: npm install
 
+      - name: Set up docker buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: network=host
+
       - name: Find Docker host IP
         run: |
           ip=$(docker run --rm alpine /bin/sh -c "apk update > /dev/null && apk add iproute2 > /dev/null && ip -4 route show default | cut -d' ' -f3")

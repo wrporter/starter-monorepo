@@ -4,14 +4,10 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "build/**"]
+      "outputs": ["dist/**"]
     },
-    "clean": {
-      "cache": false
-    },
-    "dev": {
-      "cache": false
-    },
+    "clean": {"cache": false},
+    "dev": {"cache": false},
     "docs": {
       "dependsOn": ["build"],
       "outputs": ["docs"]
@@ -20,30 +16,24 @@
       "env": ["TURBO_API", "TURBO_TEAM", "TURBO_TOKEN"]
     },
     "test": {
-      "dependsOn": ["^build"],
-      "outputs": []
+      "dependsOn": ["^build"]
     },
     "test:coverage": {
       "dependsOn": ["^build"],
       "outputs": ["coverage/**"]
     },
     "lint": {
-      "dependsOn": ["^build"],
-      "outputs": []
+      "dependsOn": ["^build"]
     },
     "lint:fix": {
-      "dependsOn": ["^build"],
-      "outputs": []
+      "dependsOn": ["^build"]
     },
-    "//#format:check": {
-      "outputs": []
-    },
+    "//#format:check": {},
     "publish": {
       "dependsOn": ["build"]
     },
     "typecheck": {
-      "dependsOn": ["^build"],
-      "outputs": []
+      "dependsOn": ["^build"]
     }
   }
 }
