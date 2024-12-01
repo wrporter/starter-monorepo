@@ -23,13 +23,14 @@ BASE_TAG="${BASE_HOST_PATH}:${GIT_COMMIT}"
 
 function dockerBuild() {
   docker build \
+    --network=host \
     --label "build-info.build-time=${BUILD_DATE}" \
     --label "build-info.git-branch=${GIT_BRANCH_NAME}" \
     --label "build-info.git-commit=${GIT_COMMIT}" \
     --label "build-info.git-repo=${GIT_REPO_URL}" \
     --label "build-info.git-user-email=${GIT_AUTHOR_EMAIL}" \
     --label "build-info.slack-channel=${SLACK_CHANNEL}" \
-    --build-arg TURBO_API="http://host.docker.internal:${TURBOGHA_PORT:-"41230"}" \
+    --build-arg TURBO_API="http://${DOCKER_HOST_IP:-"host.docker.internal"}:${TURBOGHA_PORT:-"41230"}" \
     --build-arg TURBO_TEAM=${TURBO_TEAM} \
     --build-arg TURBO_TOKEN=${TURBO_TOKEN} \
     $@
