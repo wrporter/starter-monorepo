@@ -22,6 +22,7 @@ BASE_HOST_PATH="${DOCKER_HOST}/${BASE_PATH}"
 BASE_TAG="${BASE_HOST_PATH}:${GIT_COMMIT}"
 
 function dockerBuild() {
+  # Use the host network to enable turbo caching with a locally running cache server.
   docker build \
     --network=host \
     --label "build-info.build-time=${BUILD_DATE}" \
