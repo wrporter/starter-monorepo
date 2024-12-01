@@ -1,8 +1,4 @@
 *
-# These are global turbo dependencies, so we want to include them to access caching.
-!.github/docker/config.sh
-!.github/workflows/main.yaml
-
 !.changeset
 !.npmrc
 !package.json
