@@ -14,7 +14,8 @@ dockerBuild \
   --build-arg APP_ID=${APP_ID} \
   --tag "${APP_TAG}" \
   --tag "${APP_HOST_PATH}:latest" \
-  --secret id=NPM_AUTH_TOKEN \
+#  Use if you need a npm auth token for private packages.
+#  --secret id=NPM_AUTH_TOKEN \
   $@
 
 echo "-- ${0} complete!"
