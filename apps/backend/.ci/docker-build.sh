@@ -2,4 +2,4 @@
 
 set -e
 
-APP=admin-ui .github/docker/build-app.sh .
+APP=backend .github/docker/build-app.sh .

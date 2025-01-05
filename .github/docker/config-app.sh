@@ -5,8 +5,8 @@
 source .github/docker/config.sh
 
 if [[ -z "${APP}" ]]; then
-  echo "Variable APP must be defined and corresponds to the name in package.json (e.g. admin-ui)"
-  echo "Usage: APP=admin-ui .github/docker/build-app.sh"
+  echo "Variable APP must be defined and corresponds to the name in package.json (e.g. frontend)"
+  echo "Usage: APP=frontend .github/docker/build-app.sh"
   exit 1
 fi
 
