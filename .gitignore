@@ -2,7 +2,8 @@
 .DS_Store
 
 # Editor
-.idea
+.idea/*
+!.idea/runConfigurations
 *.iml
 .vscode
 
@@ -15,3 +16,6 @@ artifact
 node_modules
 coverage
 .env
+/.vs
+vite.config.ts.*
+vitest.workspace.ts

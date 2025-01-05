@@ -3,8 +3,4 @@
 set -e
 source .github/docker/config.sh
 
-dockerBuild \
-  --build-arg APP=test-api \
-  --tag=starter-monorepo-test-api \
-  --file=apps/test-api/.ci/Dockerfile \
-  .
+APP=test-api .github/docker/build-app.sh .

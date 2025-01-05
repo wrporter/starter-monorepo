@@ -10,7 +10,7 @@ RUN npm config set update-notifier false
 ENV TURBO_TELEMETRY_DISABLED=1
 
 ###############################################################################
-# Prune to apps and packages needed just by the provided APP
+# Prune to apps and packages needed just by the provided app
 ###############################################################################
 FROM base AS prune
 
@@ -19,14 +19,12 @@ FROM base AS prune
 RUN apk add --no-cache libc6-compat
 RUN npm install --global turbo
 
-ARG APP
-
 COPY . .
 
-RUN turbo prune ${APP} --docker
+RUN turbo prune frontend --docker
 
 ###############################################################################
-# Install dependencies and build the provided APP and its dependencies
+# Install dependencies and build the provided app and its dependencies
 ###############################################################################
 FROM base AS build
 
@@ -34,8 +32,6 @@ FROM base AS build
 # to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat sudo
 RUN npm install --global turbo
-
-ARG APP
 
 ARG TURBO_API
 ARG TURBO_TEAM
@@ -47,6 +43,12 @@ ENV TURBO_TOKEN=$TURBO_TOKEN
 
 COPY --from=prune /app/out/json/ .
 
+# Use if you need to inject an npm auth token for private packages.
+#RUN --mount=type=secret,id=NPM_AUTH_TOKEN \
+#    echo "//registry.npmjs.org/:_authToken=$(cat /run/secrets/NPM_AUTH_TOKEN)" >> .npmrc \
+#    && npm ci --loglevel=warn \
+#    && rm .npmrc
+
 RUN npm ci --loglevel=warn
 
 COPY --from=prune /app/out/full/ .
@@ -54,7 +56,7 @@ COPY --from=prune /app/*prettier* .
 # Turborepo formats these differently
 RUN printf "turbo.json\npackage-lock.json" >> .prettierignore
 
-RUN npm run ci -- --filter=${APP}
+RUN npm run ci -- --filter=frontend
 
 RUN npm prune --omit=dev
 
@@ -79,21 +81,23 @@ ENV BUILD_VERSION=$BUILD_VERSION
 ENV BUILD_DATE=$BUILD_DATE
 
 ENV NODE_ENV=production
-ARG APP
 
 COPY --from=build /app/package*.json .
 COPY --from=build /app/node_modules* ./node_modules
 COPY --from=build /app/packages* ./packages
 
-WORKDIR /app/apps/${APP}
+WORKDIR /app/apps/frontend
 
-RUN chown -R node /app/apps/${APP}
+RUN chown -R node /app/apps/frontend
 
 # The * in the source copy is in case the files do not exist.
-COPY --from=build --chown=node /app/apps/${APP}/node_modules* ./node_modules
-COPY --from=build --chown=node /app/apps/${APP}/build ./build
-COPY --from=build --chown=node /app/apps/${APP}/server-build* ./server-build
+COPY --from=build --chown=node /app/apps/frontend/node_modules* ./node_modules
+COPY --from=build --chown=node /app/apps/frontend/build ./build
+COPY --from=build --chown=node /app/apps/frontend/server-build* ./server-build
 
 USER node
 
 CMD ["node", "--enable-source-maps", "./server-build/main.js"]
+
+# Use if you need OpenTelemetry.
+#CMD ["node", "--enable-source-maps", "--require=./build/opentelemetry.cjs", "./server-build/main.js"]

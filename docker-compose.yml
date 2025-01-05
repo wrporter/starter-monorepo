@@ -1,11 +1,9 @@
-services:
-  base:
-    image: base-image
-    container_name: base
-    build:
-      context: .
-      dockerfile: .github/docker/base.Dockerfile
+# Use if you need a npm auth token for private packages.
+#secrets:
+#  NPM_AUTH_TOKEN:
+#    environment: NPM_AUTH_TOKEN
 
+services:
   database:
     container_name: database
     image: postgres:16
@@ -13,84 +11,78 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+      - TZ=UTC # Set the timezone to UTC
+      - POSTGRES_INITDB_ARGS=--encoding=UTF8 --locale=en_US.UTF-8 # Set character encoding to UTF-8
     ports:
       - '5432:5432'
     volumes:
       - ./apps/database/data:/var/lib/postgresql/data
       - ./apps/database/src/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  database-migrations:
-    container_name: database-migrations
+  database-migrator:
+    container_name: database-migrator
     build:
       context: .
-      dockerfile: .github/docker/node.Dockerfile
-      args:
-        APP: database
-        BASE_IMAGE: base-image
+      dockerfile: apps/database-migrator/.ci/Dockerfile
     volumes:
       - ./apps/database/migrations:/app/migrations
     depends_on:
-      - base
-      - database
+      database:
+        condition: service_healthy
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@database:5432/monorepo
+      - DB_SERVER=database
 
   backend:
     container_name: backend
     build:
       context: .
-      dockerfile: .github/docker/node.Dockerfile
-      args:
-        APP: backend
-        BASE_IMAGE: base-image
+      dockerfile: apps/backend/.ci/Dockerfile
     ports:
-      - '3000:3000'
+      - '3001:3001'
     depends_on:
-      base:
-        condition: service_completed_successfully
-      database-migrations:
+      database-migrator:
         condition: service_completed_successfully
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@database:5432/monorepo
+      - DB_SERVER=database
 
   frontend:
     container_name: frontend
     build:
       context: .
-      dockerfile: .github/docker/node.Dockerfile
-      args:
-        APP: frontend
-        BASE_IMAGE: base-image
+      dockerfile: apps/frontend/.ci/Dockerfile
+    # This is how you would inject the secret auth token.
+    #      secrets:
+    #        - NPM_AUTH_TOKEN
     ports:
-      - '3001:3000'
+      - '3000:3000'
     depends_on:
-      - base
-      - backend
+      database-migrator:
+        condition: service_completed_successfully
 
   test-api:
     container_name: test-api
     build:
       context: .
-      dockerfile: .github/docker/vitest.Dockerfile
-      args:
-        APP: test-api
-        BASE_IMAGE: base-image
+      dockerfile: apps/test-api/.ci/Dockerfile
     depends_on:
-      - base
       - backend
-    command: npm test
     environment:
-      - ADDRESS=http://backend:3000
+      BASE_TEST_URL: 'http://backend:3001'
 
   test-e2e:
     container_name: test-e2e
+    network_mode: host
     build:
       context: .
-      dockerfile: .github/docker/playwright.Dockerfile
-      args:
-        APP: test-e2e
+      dockerfile: apps/test-e2e/.ci/Dockerfile
+    volumes:
+      - ./apps/test-e2e/playwright:/app/apps/test-e2e/playwright
+      - ./apps/test-e2e/test-results:/app/apps/test-e2e/test-results
+    env_file: apps/test-e2e/.env
     depends_on:
-      - base
       - frontend
-    environment:
-      - ADDRESS=http://frontend:3000

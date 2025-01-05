@@ -11,26 +11,22 @@ RUN npm config set update-notifier false
 ENV TURBO_TELEMETRY_DISABLED=1
 
 ###############################################################################
-# Prune to apps and packages needed just by the provided APP
+# Prune to apps and packages needed just by the provided app
 ###############################################################################
 FROM base AS prune
 
 RUN npm install --global turbo
 
-ARG APP
-
 COPY . .
 
-RUN turbo prune ${APP} --docker
+RUN turbo prune test-e2e --docker
 
 ###############################################################################
-# Install dependencies and build the provided APP and its dependencies
+# Install dependencies and build the provided app and its dependencies
 ###############################################################################
 FROM base AS build
 
 RUN npm install --global turbo
-
-ARG APP
 
 ARG TURBO_API
 ARG TURBO_TEAM
@@ -51,7 +47,7 @@ COPY --from=prune /app/*prettier* .
 RUN printf "turbo.json\npackage-lock.json" >> .prettierignore
 
 # Validate
-RUN npm run ci -- --filter=${APP}
+RUN npm run ci -- --filter=test-e2e
 
 RUN npm prune --omit=dev
 
@@ -60,14 +56,12 @@ RUN npm prune --omit=dev
 ###############################################################################
 FROM base AS production
 
-ARG APP
-
 COPY --from=build /app/package*.json .
 COPY --from=build /app/node_modules* ./node_modules
 
-WORKDIR /app/apps/${APP}
+WORKDIR /app/apps/test-e2e
 
-COPY --from=build /app/apps/${APP}/ ./
+COPY --from=build /app/apps/test-e2e/ ./
 
 RUN npx -y playwright install --with-deps
 

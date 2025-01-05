@@ -10,7 +10,7 @@ RUN npm config set update-notifier false
 ENV TURBO_TELEMETRY_DISABLED=1
 
 ###############################################################################
-# Prune to apps and packages needed just by the provided APP
+# Prune to apps and packages needed just by the provided app
 ###############################################################################
 FROM base AS prune
 
@@ -19,14 +19,12 @@ FROM base AS prune
 RUN apk add --no-cache libc6-compat
 RUN npm install --global turbo
 
-ARG APP
-
 COPY . .
 
-RUN turbo prune ${APP} --docker
+RUN turbo prune database-migrator --docker
 
 ###############################################################################
-# Install dependencies and build the provided APP and its dependencies
+# Install dependencies and build the provided app and its dependencies
 ###############################################################################
 FROM base AS build
 
@@ -54,7 +52,7 @@ COPY --from=prune /app/*prettier* .
 # Turborepo formats these differently
 RUN printf "turbo.json\npackage-lock.json" >> .prettierignore
 
-RUN npm run ci -- --filter=${APP}
+RUN npm run ci -- --filter=database-migrator
 
 RUN npm prune --omit=dev
 
@@ -79,19 +77,20 @@ ENV BUILD_VERSION=$BUILD_VERSION
 ENV BUILD_DATE=$BUILD_DATE
 
 ENV NODE_ENV=production
-ARG APP
 
 COPY --from=build /app/package*.json .
 COPY --from=build /app/node_modules* ./node_modules
 COPY --from=build /app/packages* ./packages
 
-WORKDIR /app/apps/${APP}
+WORKDIR /app/apps/database-migrator
 
-RUN chown -R node /app/apps/${APP}
+RUN chown -R node /app/apps/database-migrator
 
 # The * in the source copy is in case the files do not exist.
-COPY --from=build --chown=node /app/apps/${APP}/node_modules* ./node_modules
-COPY --from=build --chown=node /app/apps/${APP}/build ./build
+COPY --from=build --chown=node /app/apps/database-migrator/package.json .
+COPY --from=build --chown=node /app/apps/database-migrator/migrations ./migrations
+COPY --from=build --chown=node /app/apps/database-migrator/node_modules* ./node_modules
+COPY --from=build --chown=node /app/apps/database-migrator/build ./build
 
 USER node
 

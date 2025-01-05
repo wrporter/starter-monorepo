@@ -2,8 +2,11 @@
 
 set -e
 
+APP=database-migrator
+source .github/docker/config-app.sh
+
 docker run -it --rm \
-  --name=starter-monorepo-database-migrator \
-  --env-file=apps/database-migrator/.env \
-  -e DATABASE_URL="postgresql://postgres:postgres@host.docker.internal:5432/monorepo" \
-  starter-monorepo-database-migrator
+  --name=${APP_ID} \
+  --env-file=apps/${APP}/.env \
+  -e DB_SERVER="host.docker.internal" \
+  ${APP_TAG}

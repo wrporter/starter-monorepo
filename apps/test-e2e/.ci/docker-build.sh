@@ -3,8 +3,4 @@
 set -e
 source .github/docker/config.sh
 
-dockerBuild \
-  --build-arg APP=test-e2e \
-  --tag=starter-monorepo-test-e2e \
-  --file=apps/test-e2e/.ci/Dockerfile \
-  .
+APP=test-e2e .github/docker/build-app.sh .

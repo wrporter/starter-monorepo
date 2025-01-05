@@ -9,6 +9,7 @@
     "clean": "rm -rf build coverage",
     "dev": "NODE_ENV=development tsx watch --env-file=.env src/main.ts",
     "docker:build": "cd ../.. && apps/backend/.ci/docker-build.sh",
+    "docker:run": "cd ../.. && apps/backend/.ci/docker-run.sh",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "npm run lint -- --fix",
     "start": "npm run build && NODE_ENV=production node ./build/main.js",

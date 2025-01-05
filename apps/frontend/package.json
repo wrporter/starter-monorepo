@@ -11,6 +11,7 @@
     "clean": "rm -rf build",
     "dev": "tsx watch --clear-screen=false --enable-source-maps --ignore \".cache/**\" --ignore \"app/**\" --ignore \"vite.config.ts.timestamp-*\" --ignore \"build/**\" --ignore \"node_modules/**\" server/main.ts",
     "docker:build": "cd ../.. && apps/frontend/.ci/docker-build.sh",
+    "docker:run": "cd ../.. && apps/frontend/.ci/docker-run.sh",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "npm run lint -- --fix",
     "start": "NODE_ENV=production node --enable-source-maps ./build/main.js",

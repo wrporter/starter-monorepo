@@ -2,11 +2,15 @@
 
 set -e
 
+APP=frontend
+source .github/docker/config-app.sh
+
 docker run -it --rm \
-  --name=starter-monorepo-frontend \
+  --name=${APP_ID} \
   -p 3000:3000 \
   -p 22500:22500 \
-  --env-file=apps/frontend/.env \
+  --env-file=apps/${APP}/.env \
+  -e NODE_ENV=production \
   -e DB_SERVER=host.docker.internal \
   -e OTEL_EXPORTER_OTLP_ENDPOINT=http://host.docker.internal:4318 \
-  starter-monorepo-frontend
+  ${APP_TAG}

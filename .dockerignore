@@ -17,7 +17,6 @@ packages/*/**
 !apps/*/scripts
 !apps/*/server
 !apps/*/src
-!apps/*/start.sh
 !apps/*/test
 !apps/*/tests
 !apps/*/*.cjs

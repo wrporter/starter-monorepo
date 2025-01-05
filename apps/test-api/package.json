@@ -2,10 +2,10 @@
   "name": "test-api",
   "private": true,
   "type": "module",
-  "dockerfileType": "vitest",
   "scripts": {
     "ci": "run-p typecheck lint",
     "docker:build": "cd ../.. && apps/test-api/.ci/docker-build.sh",
+    "docker:run": "cd ../.. && apps/test-api/.ci/docker-run.sh",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest run",

@@ -2,8 +2,10 @@
 
 set -e
 
+APP=test-api
+source .github/docker/config-app.sh
+
 docker run -it --rm \
-  --name=starter-monorepo-test-api \
-  --env-file=apps/test-api/.env \
-  -e BASE_URL="http://host.docker.internal:3000" \
-  starter-monorepo-test-api
+  --name=${APP_ID} \
+  -e BASE_TEST_URL="http://host.docker.internal:3001" \
+  ${APP_TAG}

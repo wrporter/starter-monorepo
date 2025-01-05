@@ -11,6 +11,7 @@
     "db:migrate": "drizzle-kit migrate",
     "dev": "NODE_ENV=development tsx --env-file=.env src/main.ts",
     "docker:build": "cd ../.. && apps/database-migrator/.ci/docker-build.sh",
+    "docker:run": "cd ../.. && apps/database-migrator/.ci/docker-run.sh",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "lint:fix": "npm run lint -- --fix",
     "start": "NODE_ENV=production node ./build/main.js",

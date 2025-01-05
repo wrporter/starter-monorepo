@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [".github/workflows/main.yaml", ".github/docker/config.sh"],
+  "globalDependencies": [".github/workflows/main.yaml", ".github/docker/config.sh", ".github/docker/build-app.sh"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
