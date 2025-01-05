@@ -1,1 +1,10 @@
 playwright-report
+server-build
+test-results
+build
+server-build
+dist
+coverage
+.turbo
+package-lock.json
+turbo.json

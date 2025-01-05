@@ -4,19 +4,23 @@
   "type": "module",
   "dockerfileType": "playwright",
   "scripts": {
-    "docker:build": "cd ../.. && APP=test-e2e APP_TYPE=playwright .github/docker/build-app.sh",
+    "ci": "run-p lint",
+    "docker:build": "cd ../.. && apps/test-e2e/.ci/docker-build.sh",
+    "docker:run": "cd ../.. && apps/test-e2e/.ci/docker-run.sh",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "test": "playwright test",
     "test:ui": "playwright test --ui"
   },
   "dependencies": {
-    "@playwright/test": "1.45.3"
+    "@playwright/test": "1.49.0",
+    "dotenv": "16.4.7",
+    "zod": "3.24.1"
   },
   "devDependencies": {
-    "@wesp-up/eslint-config": "2.0.0",
+    "@types/node": "22.10.0",
+    "@wesp-up/eslint-config": "2.1.0",
     "@wesp-up/tsconfig": "2.0.0",
-    "@types/node": "22.0.0",
-    "eslint": "9.8.0"
+    "eslint": "9.15.0"
   }
 }

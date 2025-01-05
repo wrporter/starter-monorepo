@@ -6,159 +6,48 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+env:
+  TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+  TURBO_TELEMETRY_DISABLED: 1
+
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
+      - name: 🧑‍💻 Check out code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
-      - name: Setup Node.js environment
+      - name: ♻️ Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: 💿 Restore cached turbo artifacts
-        uses: actions/cache@v4
-        with:
-          path: '**/.turbo'
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
+          node-version: 22
+          cache: npm
 
       - name: 💿 Restore cached node_modules
         uses: actions/cache@v4
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
+
+      - name: 🏎️ Cache for Turborepo
+        uses: rharkor/caching-for-turbo@v1.5
 
       - name: 📦 Install dependencies
         run: npm install
 
-      - name: 🛠️ Build
-        run: npm run ci
+      - name: ✅ Validate
+        run: npm run ci:github
 
-      - name: Publish packages
+      - name: 🐳 Build Docker images
+        run: npx turbo run docker:build
+
+      # TODO: Push docker images on main
+      # TODO: Deploy docker images to dev environment on main
+
+      - name: 🚀 Publish packages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: npx changeset publish
-
-  # TODO: Detect changes in Dockerfiles to build all impacted apps. Are there
-  # other files we should also consider, such as this workflow?
-  detect-changes:
-    name: Detect changed apps
-    # TODO: Run on changes to pull requests for all changes between main and
-    # the current branch. This will ensure higher quality, especially if
-    # changes were made to the Docker builds.
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    outputs:
-      changed_apps: ${{ steps.changed-apps.outputs.apps }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Get changed app directories
-        id: changed-app-directories
-        uses: tj-actions/changed-files@v44
-        with:
-          files: apps/**/*
-          dir_names: true
-          dir_names_max_depth: 2
-          dir_names_exclude_current_dir: true
-          matrix: true
-          escape_json: false
-
-      - name: Convert app directory paths to app names
-        id: changed-apps
-        run: |
-          changed_apps=$(echo '${{ steps.changed-app-directories.outputs.all_changed_files }}' | jq -c '[.[] | sub("apps/"; "")]')
-          echo "apps=${changed_apps}" >> $GITHUB_OUTPUT
-
-  # TODO: Due to how matrices work, the base image is rebuilt in each separate
-  #       job. Build the base image in a previous job and load it in this job.
-  #       See https://docs.docker.com/build/ci/github-actions/share-image-jobs/
-  #       However, this other approach actually takes more time due to uploading,
-  #       downloading, and pushing the image to the localhost registry.
-
-  # Note: Builds are about 40 seconds faster without using the GitHub Actions
-  # cache for the docker images. And about 2 minutes faster without building the
-  # base image in a separate job to be shared across all apps.
-  docker-build:
-    name: Build docker images
-    if: needs.detect-changes.outputs.changed_apps != '[]'
-    needs: detect-changes
-    runs-on: ubuntu-latest
-    services:
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
-    env:
-      DOCKER_REGISTRY: docker.io # TODO: Update the registry
-    strategy:
-      matrix:
-        app: ${{ fromJson(needs.detect-changes.outputs.changed_apps) }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up docker buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          driver-opts: network=host
-
-      - name: Set build arguments
-        id: set-build-args
-        run: |
-          echo "APP_ID=$(basename `git rev-parse --show-toplevel`)-${{ matrix.app }}" >> $GITHUB_ENV
-          echo "BUILD_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
-          echo "BUILD_BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
-          echo "BUILD_DATE=$(date -u '+%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_ENV
-          echo "NAMESPACE=$(basename `git rev-parse --show-toplevel`)" >> $GITHUB_ENV
-
-      - name: Build base image
-        if: matrix.app != 'test-e2e'
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          file: .github/docker/base.Dockerfile
-          tags: localhost:5000/${{ env.NAMESPACE }}/base-image
-
-      - name: Determine dockerfile type from package.json
-        id: determine-dockerfile
-        run: |
-          # Read the dockerfileType from the app's package.json
-          dockerfile_type=$(jq -r '.dockerfileType' apps/${{ matrix.app }}/package.json)
-          echo "Dockerfile type for ${{ matrix.app }}: ${dockerfile_type}"
-
-          # Fail the step if dockerfileType is not found
-          if [ -z "${dockerfile_type}" ] || [ "${dockerfile_type}" == "null" ]; then
-            echo "Error: dockerfileType not found in package.json for ${{ matrix.app }}"
-            exit 1
-          fi
-
-          echo "dockerfile_type=${dockerfile_type}" >> $GITHUB_OUTPUT
-
-      - name: 'Build app image: ${{ matrix.app }}'
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: .github/docker/${{ steps.determine-dockerfile.outputs.dockerfile_type }}.Dockerfile
-          build-args: |
-            BASE_IMAGE=localhost:5000/${{ env.NAMESPACE }}/base-image
-            APP=${{ matrix.app }}
-            APP_ID=${{ env.APP_ID }}
-            BUILD_SHA=${{ env.GITHUB_SHA }}
-            BUILD_BRANCH=${{ env.BUILD_BRANCH }}
-            BUILD_DATE=${{ env.BUILD_DATE }}
-          tags: |
-            ${{ env.DOCKER_REGISTRY }}/${{ env.NAMESPACE }}/${{ matrix.app }}:latest
-            ${{ env.DOCKER_REGISTRY }}/${{ env.NAMESPACE }}/${{ matrix.app }}:${{ env.BUILD_SHA }}

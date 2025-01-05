@@ -1,47 +1,39 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [".github/workflows/main.yaml", ".github/docker/config.sh", ".github/docker/build-app.sh"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", "build/**"]
+      "outputs": ["dist/**"]
     },
-    "ci": {
-      "dependsOn": ["^ci"]
-    },
-    "clean": {
-      "cache": false
-    },
-    "dev": {
-      "cache": false
-    },
+    "clean": {"cache": false},
+    "dev": {"cache": false},
     "docs": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["build"],
       "outputs": ["docs"]
     },
+    "docker:build": {
+      "env": ["TURBO_API", "TURBO_TEAM", "TURBO_TOKEN"]
+    },
     "test": {
-      "dependsOn": ["build"],
-      "outputs": []
+      "dependsOn": ["^build"]
     },
     "test:coverage": {
-      "dependsOn": ["build"],
-      "outputs": []
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
     },
     "lint": {
-      "dependsOn": ["build"],
-      "outputs": []
+      "dependsOn": ["^build"]
     },
     "lint:fix": {
-      "outputs": []
+      "dependsOn": ["^build"]
     },
-    "format": {
-      "outputs": []
-    },
+    "//#format:check": {},
     "publish": {
       "dependsOn": ["build"]
     },
     "typecheck": {
-      "dependsOn": ["build"],
-      "outputs": []
+      "dependsOn": ["^build"]
     }
   }
 }

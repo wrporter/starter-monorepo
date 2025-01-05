@@ -1,11 +1,15 @@
-import { createServer } from './lib/server/server.js';
+import { createServer } from '@wesp-up/express';
+import { Application } from 'express';
+
 import { contactRouter } from './modules/contacts/contact.router.js';
 
-const servicePrefix = '/contact-service';
-const server = createServer({ pathPrefix: servicePrefix });
+const pathPrefix = '/contact-service';
 
-server.app.register(contactRouter, { prefix: servicePrefix });
+const server = createServer({
+  pathPrefix,
+  mountApp(app: Application) {
+    app.use(pathPrefix, contactRouter);
+  },
+});
 
-// TODO: Add deep health check for dependencies (e.g. database)
-
-await server.start(3000);
+server.start(3001, 22501);

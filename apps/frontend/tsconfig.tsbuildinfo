@@ -1,0 +1,1 @@
+{"root":["./tailwind.config.ts","./vite.config.ts","./app/lib/mui/getmuilinks.ts","./app/lib/mui/theme.ts","./server/main.ts","./app/entry.client.tsx","./app/entry.server.tsx","./app/root.tsx","./app/lib/mui/muidocument.tsx","./app/lib/mui/muimeta.tsx","./app/lib/mui/muiprovider.tsx","./app/routes/_index.tsx"],"version":"5.7.2"}
