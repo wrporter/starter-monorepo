@@ -1,5 +1,5 @@
 /* v8 ignore start */
-import { contacts } from '@repo/database';
+import { contacts } from '@repo/db-schema';
 import { eq } from 'drizzle-orm';
 
 import { db } from '../../db.js';

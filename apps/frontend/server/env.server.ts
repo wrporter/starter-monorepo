@@ -10,7 +10,6 @@ const envSchema = z.object({
   DB_PORT: z.number().default(5432),
   DB_USER: z.string().trim().default('postgres'),
   DB_PASSWORD: z.string().trim().default('postgres'),
-  DB_CA_CERT_PATH: z.string().trim().optional(),
 
   SESSION_SECRET: z.string().trim().default('SuperSecret'),
 

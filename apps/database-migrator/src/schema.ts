@@ -1,1 +1,1 @@
-export * from '@repo/database';
+export * from '@repo/db-schema';
