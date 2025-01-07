@@ -1,2 +1,4 @@
 .cache
+.react-router
 build
+server-build

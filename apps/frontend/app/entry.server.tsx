@@ -6,37 +6,36 @@
 
 import { PassThrough } from 'node:stream';
 
-import type { EntryContext } from '@remix-run/node';
-import { createReadableStreamFromReadable } from '@remix-run/node';
-import { RemixServer } from '@remix-run/react';
+import { createReadableStreamFromReadable } from '@react-router/node';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
+import { ServerRouter } from 'react-router';
+import type { EntryContext } from 'react-router';
 
-import { MuiProvider } from '~/lib/mui/MuiProvider';
-
-const ABORT_DELAY = 5_000;
+// Reject/cancel all pending promises after 5 seconds
+export const streamTimeout = 5_000;
 
 export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  reactRouterContext: EntryContext,
 ) {
   return isbot(request.headers.get('user-agent') || '')
-    ? handleBotRequest(request, responseStatusCode, responseHeaders, remixContext)
-    : handleBrowserRequest(request, responseStatusCode, responseHeaders, remixContext);
+    ? handleBotRequest(request, responseStatusCode, responseHeaders, reactRouterContext)
+    : handleBrowserRequest(request, responseStatusCode, responseHeaders, reactRouterContext);
 }
 
 function handleBotRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  reactRouterContext: EntryContext,
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />,
+      <ServerRouter context={reactRouterContext} url={request.url} />,
       {
         onAllReady() {
           shellRendered = true;
@@ -70,7 +69,9 @@ function handleBotRequest(
       },
     );
 
-    setTimeout(abort, ABORT_DELAY);
+    // Automatically timeout the React renderer after 6 seconds, which ensures
+    // React has enough time to flush down the rejected boundary contents
+    setTimeout(abort, streamTimeout + 1000);
   });
 }
 
@@ -78,14 +79,12 @@ function handleBrowserRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  reactRouterContext: EntryContext,
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      <MuiProvider>
-        <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />
-      </MuiProvider>,
+      <ServerRouter context={reactRouterContext} url={request.url} />,
       {
         onShellReady() {
           shellRendered = true;
@@ -119,6 +118,8 @@ function handleBrowserRequest(
       },
     );
 
-    setTimeout(abort, ABORT_DELAY);
+    // Automatically timeout the React renderer after 6 seconds, which ensures
+    // React has enough time to flush down the rejected boundary contents
+    setTimeout(abort, streamTimeout + 1000);
   });
 }

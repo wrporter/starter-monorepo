@@ -1,4 +1,6 @@
-import { LinksFunction } from '@remix-run/node';
+import * as React from 'react';
+import { PropsWithChildren } from 'react';
+import { LinksFunction } from 'react-router';
 import {
   Links,
   Meta,
@@ -7,20 +9,11 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   useRouteError,
-} from '@remix-run/react';
-import * as React from 'react';
-import { PropsWithChildren } from 'react';
+} from 'react-router';
 
 import tailwindStyleSheetUrl from './tailwind.css?url';
 
-import { getMuiLinks } from '~/lib/mui/getMuiLinks';
-import { MuiDocument } from '~/lib/mui/MuiDocument';
-import { MuiMeta } from '~/lib/mui/MuiMeta';
-
-export const links: LinksFunction = () => [
-  { rel: 'stylesheet', href: tailwindStyleSheetUrl },
-  ...getMuiLinks(),
-];
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: tailwindStyleSheetUrl }];
 
 export function Layout({ children }: PropsWithChildren) {
   return (
@@ -29,7 +22,6 @@ export function Layout({ children }: PropsWithChildren) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
-        <MuiMeta />
         <Links />
       </head>
       <body>
@@ -41,16 +33,13 @@ export function Layout({ children }: PropsWithChildren) {
   );
 }
 
-export default function App() {
-  return (
-    <MuiDocument>
-      <Outlet />
-    </MuiDocument>
-  );
+export default function Component() {
+  return <Outlet />;
 }
 
 export function ErrorBoundary() {
   const error = useRouteError();
+  console.log(error);
 
   if (isRouteErrorResponse(error)) {
     let message;
@@ -67,26 +56,24 @@ export function ErrorBoundary() {
     }
 
     return (
-      <MuiDocument>
+      <>
         <h1>
           {error.status}: {error.statusText}
         </h1>
         {message}
-      </MuiDocument>
+      </>
     );
   }
 
   if (error instanceof Error) {
     console.error(error);
     return (
-      <MuiDocument>
-        <div>
-          <h1>There was an error</h1>
-          <p>{error.message}</p>
-          <hr />
-          <p>Hey, developer, you should replace this with what you want your users to see.</p>
-        </div>
-      </MuiDocument>
+      <div>
+        <h1>There was an error</h1>
+        <p>{error.message}</p>
+        <hr />
+        <p>Hey, developer, you should replace this with what you want your users to see.</p>
+      </div>
     );
   }
 
