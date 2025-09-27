@@ -6,17 +6,20 @@
 services:
   database:
     container_name: database
-    image: postgres:16
+    image: postgres:18
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+      - APP_USER=monorepo
+      - APP_PASSWORD=monorepopass
+      - APP_DB=monorepo
       - TZ=UTC # Set the timezone to UTC
       - POSTGRES_INITDB_ARGS=--encoding=UTF8 --locale=en_US.UTF-8 # Set character encoding to UTF-8
     ports:
       - '5432:5432'
     volumes:
-      - ./apps/database/data:/var/lib/postgresql/data
+      - ./apps/database/data:/var/lib/postgresql/18/docker
       - ./apps/database/src/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres']

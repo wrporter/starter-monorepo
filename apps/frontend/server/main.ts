@@ -175,7 +175,7 @@ export class ReactRouterServer extends Server {
     const { publicPath, assetsBuildDirectory, assetsRoot } = this.reactRouterOptions;
 
     // Do not allow trailing slashes in URLs
-    app.get('*', redirectWithoutTrailingSlash);
+    app.get(/(.*)/, redirectWithoutTrailingSlash);
 
     // Static assets
     if (viteDevServer) {
@@ -191,8 +191,8 @@ export class ReactRouterServer extends Server {
 
     // React Router routes
     app.all(
-      '*',
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      /(.*)/,
+
       createRequestHandler({
         getLoadContext: (req: Request) => ({
           serverBuild: getBuild(),

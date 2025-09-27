@@ -9,7 +9,7 @@ const envSchema = z.object({
   CI: z
     .string()
     .transform((v) => v === 'true')
-    .default('false'),
+    .default(false),
 
   /**
    * Whether to ignore HTTPS error, such as invalid certificate. This should only be used for local
@@ -18,7 +18,7 @@ const envSchema = z.object({
   IGNORE_HTTPS_ERRORS: z
     .string()
     .transform((v) => v === 'true')
-    .default('false'),
+    .default(false),
 
   TEST_USERNAME: z.string().trim(),
   TEST_PASSWORD: z.string().trim(),

@@ -19,16 +19,16 @@
   },
   "dependencies": {
     "@repo/db-schema": "*",
-    "drizzle-kit": "0.28.1",
-    "drizzle-orm": "0.36.4",
-    "postgres": "3.4.5",
-    "zod": "3.24.1"
+    "drizzle-kit": "0.31.5",
+    "drizzle-orm": "0.44.5",
+    "postgres": "3.4.7",
+    "zod": "4.1.11"
   },
   "devDependencies": {
-    "@types/node": "22.10.0",
+    "@types/node": "24.5.2",
     "@wesp-up/eslint-config": "2.1.0",
     "@wesp-up/tsconfig": "2.0.0",
-    "eslint": "9.15.0",
-    "typescript": "5.7.2"
+    "eslint": "9.36.0",
+    "typescript": "5.9.2"
   }
 }

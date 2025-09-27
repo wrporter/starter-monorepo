@@ -1,5 +1,5 @@
 {
-  "id": "51534dc2-ee3a-41d4-9ea0-fc6a2d5eb3c6",
+  "id": "fdabbbe9-ae31-4745-ab37-3fdc633afe4a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -49,8 +49,8 @@
         }
       },
       "indexes": {
-        "email_index": {
-          "name": "email_index",
+        "contacts_email_index": {
+          "name": "contacts_email_index",
           "columns": [
             {
               "expression": "email",
@@ -64,8 +64,8 @@
           "method": "btree",
           "with": {}
         },
-        "first_name_index": {
-          "name": "first_name_index",
+        "contacts_first_name_index": {
+          "name": "contacts_first_name_index",
           "columns": [
             {
               "expression": "first_name",
@@ -79,8 +79,8 @@
           "method": "btree",
           "with": {}
         },
-        "last_name_index": {
-          "name": "last_name_index",
+        "contacts_last_name_index": {
+          "name": "contacts_last_name_index",
           "columns": [
             {
               "expression": "last_name",
@@ -97,12 +97,18 @@
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {},
   "schemas": {},
   "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
   "_meta": {
     "columns": {},
     "schemas": {},

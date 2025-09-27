@@ -23,9 +23,9 @@
   "devDependencies": {
     "@wesp-up/eslint-config": "2.1.0",
     "@wesp-up/tsconfig": "2.0.0",
-    "drizzle-orm": "0.38.3",
-    "eslint": "9.17.0",
-    "tsup": "8.3.5",
-    "typescript": "5.7.2"
+    "drizzle-orm": "0.44.5",
+    "eslint": "9.36.0",
+    "tsup": "8.5.0",
+    "typescript": "5.9.2"
   }
 }

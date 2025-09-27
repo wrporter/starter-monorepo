@@ -1,7 +1,7 @@
 ###############################################################################
 # Base image
 ###############################################################################
-FROM mcr.microsoft.com/playwright:v1.49.0-noble AS base
+FROM mcr.microsoft.com/playwright:v1.50.0-noble AS base
 
 WORKDIR /app
 
