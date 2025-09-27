@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b4401c63-120f-4a44-90ef-c0379244b5fb" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/apps/backend/.env.example" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/database-migrator/.env.example" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/database-migrator/migrations/0000_nosy_black_bird.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/database/src/init-db.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/test-e2e/.env.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/.ci/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/.ci/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/backend/src/db.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/src/db.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/database-migrator/.ci/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/apps/database-migrator/.ci/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/database-migrator/drizzle.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/database-migrator/drizzle.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/database-migrator/migrations/0000_young_nomad.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/database-migrator/migrations/meta/0000_snapshot.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/database-migrator/migrations/meta/0000_snapshot.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/database-migrator/migrations/meta/_journal.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/database-migrator/migrations/meta/_journal.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/database-migrator/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/database-migrator/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/.ci/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/.ci/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/app/routes/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/app/routes/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/app/tailwind.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/app/tailwind.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/postcss.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/server/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/server/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/frontend/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/frontend/vite.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/test-api/.ci/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/apps/test-api/.ci/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/test-api/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/test-api/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/test-e2e/.ci/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/apps/test-e2e/.ci/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/test-e2e/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/test-e2e/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/test-e2e/src/env.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/test-e2e/src/env.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/db-schema/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/db-schema/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/turbo.json" beforeDir="false" afterPath="$PROJECT_DIR$/turbo.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;wrporter&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/wrporter/starter-monorepo.git&quot;,
+    &quot;accountId&quot;: &quot;aa14b80d-3f1a-44c7-a927-bb95e9b5bbf0&quot;
+  }
+}</component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="33Fz7mi9IIQFZnLTdXKQGXlSZmd" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/Users/wesp/code/src/github.com/wrporter/starter-monorepo/apps/test-e2e",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "settings.javascript.linters.eslint",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "/Users/wesp/code/src/github.com/wrporter/starter-monorepo/node_modules/typescript/lib"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/apps/test-e2e" />
+      <recent name="$PROJECT_DIR$/apps/database-migrator" />
+      <recent name="$PROJECT_DIR$/apps/backend" />
+      <recent name="$PROJECT_DIR$/apps/frontend" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b4401c63-120f-4a44-90ef-c0379244b5fb" name="Changes" comment="" />
+      <created>1758927442866</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1758927442866</updated>
+      <workItem from="1758927444043" duration="1580000" />
+      <workItem from="1758931197693" duration="16796000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

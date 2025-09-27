@@ -2,9 +2,6 @@
 .DS_Store
 
 # Editor
-.idea/*
-!.idea/runConfigurations
-*.iml
 .vscode
 
 # Build
